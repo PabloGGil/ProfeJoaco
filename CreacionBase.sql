@@ -1,120 +1,65 @@
 /usr/lib/postgresql/17/bin
 /usr/local/pgsql/data
 
-create database INV;
+create database profejoaco;
 -- -------------------------
 -- CREACION DE TABLESPACES
 -- -------------------------
-CREATE TABLESPACE DATOS LOCATION '/inventario/data/datos';
-CREATE TABLESPACE INDICES LOCATION '/inventario/data/indices';
+CREATE TABLESPACE DATOS_JOACO LOCATION '/profejoaco/data/datos';
+CREATE TABLESPACE INDICES_JOACO LOCATION '/profejoaco/data/indices';
+CREATE USER joaco WITH PASSWORD 'joaco2002'; 
+CREATE SCHEMA joacosch  AUTHORIZATION joaco;
 
-CREATE SCHEMA schinv  AUTHORIZATION inventario;
-
-CREATE TABLE schinv.equipo
+CREATE TABLE joacosch.usuario
 (
-	id_equipo 		SERIAL PRIMARY KEY,
-    codigo			TEXT NOT NULL,
-	marca 			TEXT,
-	modelo 			text,
-	serie 			TEXT,
-	estado 			TEXT,
-	fecha_ingreso 	TIMESTAMP,
-	tipo_id			INTEGER NOT NULL,
-	puesto_id       INTEGER NOT NULL,
-	proveedor_id    INTEGER
-) TABLESPACE DATOS;
-ALTER TABLE schinv.equipo OWNER TO inventario;
+	id      		SERIAL PRIMARY KEY,
+    nombre			TEXT NOT NULL,
+	apellido		TEXT,
+	correo			text,
+	fechanac 		date,
+	Activo 			TEXT,
+	fecharegistro 	TIMESTAMP,
+	comentario		TEXT NOT NULL
+	
+) TABLESPACE DATOS_JOACO;
+ALTER TABLE joacosch.usuario OWNER TO joaco;
 
 
-CREATE TABLE schinv.tipo_equipo
+CREATE TABLE joacosch.seguimiento
 (
-	id_tipo 	SERIAL PRIMARY KEY,
-    nombre 		TEXT,
-	descripcion text,
-	estado integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.tipo_equipo OWNER TO inventario;
+	id					serial primary key,
+	id_usuario		 	integer,
+    Fecha_seguimiento 	TIMESTAMP,
+	comentario 			text
+	
+) TABLESPACE DATOS_JOACO;
+ALTER TABLE joacosch.seguimiento OWNER TO joaco;
 
-CREATE TABLE schinv.puesto
-(
-	id_puesto 	SERIAL PRIMARY KEY,
-    nombre 		TEXT,
-	descripcion text,
-	duenio 		integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.puesto OWNER TO inventario;
-
-CREATE TABLE schinv.equipo_ubic
-(
-	id_equipo integer,
-    id_puesto integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.equipo_ubic OWNER TO inventario;
-
-CREATE TABLE schinv.grupos
-(
-	id_grupo 	SERIAL PRIMARY KEY,
-    nombre 		TEXT,
-	descripcion text
-) TABLESPACE DATOS;
-ALTER TABLE schinv.grupos OWNER TO inventario;
-
-CREATE TABLE schinv.usr_grupo
-(
-	id_grupo 	integer,
-    id_usuario 	integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.usr_grupo OWNER TO inventario;
-
-
-CREATE TABLE schinv.perm_tipo
-(
-	id_grupo 	integer,
-    id_tipo 	integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.perm_tipo OWNER TO inventario;
-
-CREATE TABLE schinv.persona
-(
-	id_persona 	SERIAL PRIMARY KEY,
-    nombre     	TEXT,
-	username 	text,
-	tipo     	integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.persona OWNER TO inventario;
-
-CREATE TABLE schinv.tipo_persona
-(
-	id_tipopersona 	SERIAL PRIMARY KEY,
-    nombre     		TEXT,
-	descripcion 	text,
-	tipo     	integer
-) TABLESPACE DATOS;
-ALTER TABLE schinv.tipo_persona OWNER TO inventario;
-
-CREATE TABLE schinv.bitacora
+CREATE TABLE joacosch.planes
 (
 	id 			SERIAL PRIMARY KEY,
-    fecha     	timestamp,
-	accion	 	text,
-	antes     	text,
-	despues		text,
-	objeto		text
-) TABLESPACE DATOS;
+    nombre 		TEXT,
+	descripcion text
+	
+) TABLESPACE DATOS_JOACO;
+ALTER TABLE joacosch.planes OWNER TO joaco;
 
-CREATE TABLE schinv.proveedor
+CREATE TABLE joacosch.plan_usuario
 (
-	id_proveedor SERIAL PRIMARY KEY,
-    nombre     	 text,
-	referente	 text,
-	telefono   	text,
-	direccion	text,
-	timestamp	timestamp
-) TABLESPACE DATOS;
-ALTER TABLE schinv.proveedor OWNER TO inventario;
+	id			serial primary key,
+	id_plan 	integer,
+    id_usuario 	integer,
+	repeticiones	integer,
+	series 		integer,
+	comentarios	text,
+	peso		FLOAT
+) TABLESPACE DATOS_JOACO;
+ALTER TABLE joacosch.plan_usuario OWNER TO joaco;
+
+
 
 --Llaves foraneas
-alter table schinv.equipos add CONSTRAINT fk_tipo_equipo  FOREIGN KEY ("tipo_ID")   REFERENCES schinv.tipo_equipo(id_tipo);
-alter table schinv.equipos add constraint fk_PUESTO       FOREIGN KEY ("puesto_ID") REFERENCES schinv.puesto(id_puesto);
-alter table schinv.equipos add constraint fk_provvedor    FOREIGN KEY ("proveedor_ID") REFERENCES schinv.proveedor(id_proveedor);
-alter table schinv.puesto  add CONSTRAINT fk_proveedor    FOREIGN KEY ("proveedor_ID") REFERENCES equipo_ubic(id_proveedor);
+alter table joacosch.plan_usuario add CONSTRAINT fk_planes  FOREIGN KEY ("id_plan")   REFERENCES joacosch.planes(id);
+alter table joacosch.plan_usuario add constraint fk_usuario FOREIGN KEY ("id_usuario") REFERENCES joacosch.usuario(id);
+alter table joacosch.seguimiento  add constraint fk_usuario FOREIGN KEY ("id_usuario") REFERENCES joacosch.usuario(id);
+--alter table joacosch.puesto  add CONSTRAINT fk_proveedor    FOREIGN KEY ("proveedor_ID") REFERENCES equipo_ubic(id_proveedor);
