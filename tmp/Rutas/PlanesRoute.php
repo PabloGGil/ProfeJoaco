@@ -1,5 +1,5 @@
 <?php
-// routes/planes.php
+
 
 return function($router) {
     // Rutas de Plan

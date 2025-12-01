@@ -1,5 +1,4 @@
 <?php
-// routes/asignaciones.php
 
 return function($router) {
     // Rutas de Asignación

@@ -2,7 +2,7 @@
 
 /**
  * Clase de Conexion contra la base de datos de la aplicacion
- * Utiliza patron Singleton para asegurar una �nica conexion para toda 
+ * Utiliza patron Singleton para asegurar una unica conexion para toda 
  * aplicacion.
  */
 class DB_pg_connection {

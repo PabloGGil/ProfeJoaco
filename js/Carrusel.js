@@ -76,24 +76,4 @@
             updateCarousel();
     })
 
-    document.getElementById('userForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Obtener valores del formulario
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const birthDate = document.getElementById('birthDate').value;
-            const comments = document.getElementById('comments').value;
-            
-            // Validación básica
-            if (!firstName || !lastName || !birthDate) {
-                alert('Por favor, complete todos los campos obligatorios.');
-                return;
-            }
-            
-            // Mostrar mensaje de éxito
-            alert(`¡Registro exitoso!\n\nNombre: ${firstName} ${lastName}\nFecha de Nacimiento: ${birthDate}\nComentarios: ${comments || 'Ninguno'}`);
-            
-            // Limpiar formulario
-            document.getElementById('userForm').reset();
-        });
+    

@@ -23,44 +23,55 @@
                 <li><a href="registro.html">Registrate</a></li>
                 <li><a href="login.html">Ingresar</a></li>
                 <li><a href="AdminUsuario.html" id="nav-form">Agregar Usuario</a></li>
-                <li><a href="AdminUsuario.html" id="nav-list">Ver Usuarios</a></li>
+                <li><a href="#" id="nav-list">Ver Usuarios</a></li>
             </ul>
         </div>
     </nav>
     
     <main>
         <div class="container">
-            <div class="form-container">
-                <h2>Ingreso</h2>
-                <form id="userForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Correo</label>
-                            <input type="text" id="correo" name="correo" placeholder="Nombre de usuario/correo" required>
+            <!-- Formulario para agregar/editar usuario -->
+            <section id="user-form-section" class="user-form">
+                <div class="form-container">
+                    <h2 id="form-title">Agregar Nuevo Usuario</h2>
+                    <form id="user-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellido">Apellido</label>
+                                <input type="text" id="apellido" name="apellido" required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="lastName">Contraseña</label>
-                            <input type="text" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                            <label for="correo">Correo Electrónico</label>
+                            <input type="email" id="correo" name="correo" required>
                         </div>
+                        <div class="form-group">
+                            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                            <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                        </div>
+                        <button type="submit" class="btn-submit" id="submit-btn">Agregar Usuario</button>
+                        <button type="button" class="btn-submit" id="cancel-btn" style="background: #6c757d; margin-top: 10px; display: none;">Cancelar</button>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- Lista de usuarios -->
+            <section id="users-list-section" class="users-list hidden">
+                <div class="form-container">
+                    <h2>Lista de Usuarios</h2>
+                    <div id="users-container">
+                        <!-- Los usuarios se cargarán aquí dinámicamente -->
                     </div>
-                    
-                    <!-- <div class="form-group">
-                        <label for="birthDate">Fecha de Nacimiento</label>
-                        <input type="date" id="birthDate" name="birthDate" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="comments">Comentarios</label>
-                        <textarea id="comments" name="comments" placeholder="Ingrese cualquier comentario adicional..."></textarea>
-                    </div> -->
-                    
-                    <button type="submit" class="btn-submit">Enviar</button>
-                </form>
-            </div>
+                </div>
+            </section>
         </div>
     </main>
     
-     <footer>
+    <footer>
         <div class="container">
             <div class="footer-content">
                 <h3>Contáctanos</h3>
@@ -85,7 +96,13 @@
         </div>
     </footer>
     
-    <script src="../js/Carrusel.js"></script>
+    <script src="../js/AdminUsuarios.js"></script>
+    <!-- <script src="../js/Carrusel.js"></script> -->
     <script src="../js/validar.js"></script>
+    
+    <script>
+        // Datos de ejemplo (simulando una base de datos)
+    
+    </script>
 </body>
 </html>

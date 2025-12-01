@@ -10,7 +10,7 @@ CREATE TABLESPACE INDICES_JOACO LOCATION '/profejoaco/data/indices';
 CREATE USER joaco WITH PASSWORD 'joaco2002'; 
 CREATE SCHEMA joacosch  AUTHORIZATION joaco;
 
-CREATE TABLE joacosch.usuario
+CREATE TABLE joacosch.usuarios
 (
 	id      		SERIAL PRIMARY KEY,
     nombre			TEXT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE joacosch.usuario
 	comentario		TEXT NOT NULL
 	
 ) TABLESPACE DATOS_JOACO;
-ALTER TABLE joacosch.usuario OWNER TO joaco;
+ALTER TABLE joacosch.usuarios OWNER TO joaco;
 
 
 CREATE TABLE joacosch.seguimiento
@@ -60,6 +60,6 @@ ALTER TABLE joacosch.plan_usuario OWNER TO joaco;
 
 --Llaves foraneas
 alter table joacosch.plan_usuario add CONSTRAINT fk_planes  FOREIGN KEY ("id_plan")   REFERENCES joacosch.planes(id);
-alter table joacosch.plan_usuario add constraint fk_usuario FOREIGN KEY ("id_usuario") REFERENCES joacosch.usuario(id);
+alter table joacosch.plan_usuario add constraint fk_usuario FOREIGN KEY ("id_usuario") REFERENCES joacosch.usuarios(id);
 alter table joacosch.seguimiento  add constraint fk_usuario FOREIGN KEY ("id_usuario") REFERENCES joacosch.usuario(id);
 --alter table joacosch.puesto  add CONSTRAINT fk_proveedor    FOREIGN KEY ("proveedor_ID") REFERENCES equipo_ubic(id_proveedor);
