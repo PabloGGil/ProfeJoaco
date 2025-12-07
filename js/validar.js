@@ -1,6 +1,17 @@
 const UrlBase = "/vista/Ajax.php";
 
-document.getElementById('userForm').addEventListener('submit', function(e) {
+document.addEventListener("DOMContentLoaded", function() {
+    const toggles = document.querySelectorAll(".submenu-toggle");
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener("click", function(e) {
+            e.preventDefault(); // evita que se siga el link
+            const parentLi = this.parentElement;
+            parentLi.classList.toggle("open"); // alterna la clase "open"
+        });
+    });
+});
+    document.getElementById('userForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Obtener valores del formulario

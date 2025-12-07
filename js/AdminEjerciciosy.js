@@ -1,18 +1,20 @@
-    const UrlBase = "/vista/Ajax.php";
-    let users = JSON.parse(localStorage.getItem('users')) || [
+    // const UrlBase = "/vista/Ajax.php";
+
+
+    let ejercicios = JSON.parse(localStorage.getItem('ejercicios')) || [
             {
                 id: 1,
-                nombre: 'Ana',
-                apellido: 'García',
-                correo: 'ana.garcia@example.com',
-                fechaNacimiento: '1990-05-15'
+                musculo: 'Ana',
+                ejercicio: 'García',
+                explicacion: 'ana.garcia@example.com',
+                
             },
             {
                 id: 2,
-                nombre: 'Carlos',
-                apellido: 'López',
-                correo: 'carlos.lopez@example.com',
-                fechaNacimiento: '1985-11-22'
+                musculo: 'Carlos',
+                ejercicio: 'López',
+                explicacion: 'carlos.lopez@example.com',
+               
             }
         ];
         
@@ -24,9 +26,9 @@
         const formTitle = document.getElementById('form-title');
         const submitBtn = document.getElementById('submit-btn');
         const cancelBtn = document.getElementById('cancel-btn');
-        const usersContainer = document.getElementById('users-container');
-        const userFormSection = document.getElementById('user-form-section');
-        const usersListSection = document.getElementById('users-list-section');
+        const ejerciciosContainer = document.getElementById('users-container');
+        const ejerciciosFormSection = document.getElementById('ejercicios-form-section');
+        const ejerciciosListSection = document.getElementById('ejercicios-list-section');
         const navForm = document.getElementById('nav-form');
         const navList = document.getElementById('nav-list');
         
@@ -139,9 +141,9 @@
         }
         
         // Renderizar lista de usuarios
-        function renderUsers() {
-            if (users.length === 0) {
-                usersContainer.innerHTML = '<div class="no-users">No hay usuarios registrados</div>';
+        function renderEjercicios() {
+            if (ejercicios.length === 0) {
+                ejerciciosContainer.innerHTML = '<div class="no-users">No hay usuarios registrados</div>';
                 return;
             }
             
@@ -149,27 +151,24 @@
                 <table class="users-table">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Correo</th>
-                            <th>Fecha Nacimiento</th>
-                            <th>Acciones</th>
+                            <th>Musculo</th>
+                            <th>Ejercicio</th>
+                            <th>Explicacion</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
             
-            users.forEach(user => {
+            ejercicios.forEach(ejercicio => {
                 tableHTML += `
                     <tr>
-                        <td>${user.nombre}</td>
-                        <td>${user.apellido}</td>
-                        <td>${user.correo}</td>
-                        <td>${formatDate(user.fechaNacimiento)}</td>
+                        <td>${ejercicio.musculo}</td>
+                        <td>${ejercicio.ejercicio}</td>
+                        <td>${ejercicio.explicacion}</td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn-edit" onclick="editUser(${user.id})">Editar</button>
-                                <button class="btn-delete" onclick="deleteUser(${user.id})">Eliminar</button>
+                                <button class="btn-edit" onclick="editEjercicio(${ejercicio.id})">Editar</button>
+                                <button class="btn-delete" onclick="deleteUser(${ejercicio.id})">Eliminar</button>
                             </div>
                         </td>
                     </tr>
@@ -181,7 +180,7 @@
                 </table>
             `;
             
-            usersContainer.innerHTML = tableHTML;
+            ejerciciosContainer.innerHTML = tableHTML;
         }
         
         // Formatear fecha para mostrar

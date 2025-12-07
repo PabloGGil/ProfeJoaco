@@ -437,3 +437,36 @@
         .users-list {
             margin-top: 40px;
         }
+
+/* .submenu {
+    display: none;
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #eee;
+}
+/* 
+.has-submenu.open .submenu {
+    display: block;
+} */
+/* .menu-item:hover .submenu {
+    display: block;
+}
+
+.submenu li {
+    list-style: none;
+}
+
+.submenu a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.submenu a:hover,
+.submenu a.active {
+    background-color: #f0f0f0;
+}
+  */

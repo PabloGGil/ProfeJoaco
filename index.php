@@ -18,13 +18,19 @@
     <nav>
         <div class="container">
             <ul class="menu">
-                <li><a href="../index.html" >Inicio</a></li>
-                <li><a href="vista/actividades.html">Actividades</a></li>
-                <li><a href="vista/planesEntrenamiento.html">Planes de  Entrenamiento</a></li>
-                <li><a href="vista/registro.html">Registrate</a></li>
-                <li><a href="vista/login.html">Ingresar</a></li>
-                <li><a href="vista/AdminUsuario.html" id="nav-form">Agregar Usuario</a></li>
-                <li><a href="vista/AdminUsuario.html" id="nav-list">Ver Usuarios</a></li>
+                <li><a href="../index.php" >Inicio</a></li>
+                <li><a href="vista/actividades.php">Actividades</a></li>
+                <li><a href="vista/planesEntrenamiento.php">Planes de  Entrenamiento</a></li>
+                <li><a href="vista/registro.php">Registrate</a></li>
+                <li><a href="vista/login.php">Ingresar</a></li>
+                <li class="has-submenu">
+                    <a href="#" class="submenu-toggle">Administración</a>
+                    <ul class="submenu">
+                        <!-- <li><a href="AdminUsuario.php" id="nav-form">Agregar Usuario</a></li> -->
+                        <li><a href="vista/AdminUsuario.php" id="nav-list-usuario">Usuarios</a></li>
+                        <li><a href="vista/AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </nav>
@@ -115,6 +121,6 @@
     </footer>
     
     <script src="js/Carrusel.js">   </script>
-    <script src="js/validar.js">   </script>
+    <!-- <script src="js/validar.js">   </script> -->
 </body>
 </html>
