@@ -4,6 +4,7 @@ $path_cli=__DIR__.'/../';
 include_once($path_cli."BaseDatos/Conexion.php");
 include_once($path_cli."Sistema/logger.php");
 include_once($path_cli."Sistema/CargaConfiguracion.php");
+include_once($path_cli."Sistema/Respuesta.php");
 
 
 /**
@@ -31,7 +32,6 @@ class BD {
 	private $db_charset;
 	private $dato;
 
-	// private $sqlError;
 	private $textoSql;
 	private $ROOT_PATH;
 	
@@ -39,7 +39,6 @@ class BD {
 	protected $Log;
 	private $cantReg;
         
-//        private $FINDBYID="";
 
 	public function __construct($dato=0){
 		//verifica la existencia del archivo de configuraci�n y el path relativo del mismo para efectuar la inclucion
@@ -64,10 +63,10 @@ class BD {
 			BD::seteaDato($dato);
 		}
 		else{
-            $this->dato=array(0);
-        }
-        var_dump($this->conn);
-		// $this->sqlError="";
+			$this->dato=array(0);
+		}
+		var_dump($this->conn);
+		
 		$this->cantReg=0;
 	}
 
@@ -99,68 +98,58 @@ class BD {
 	public  function getCantReg(){
 		return $this->cantReg;
 	}
-/**
-	 * Procesa las instrucciones SQL pasadas como primer parametro, para ello utiliza el reemplazo de las
-	 * variables definidas como %x por el valor ordinal de la lista de parametros.
-	 *
-	 * @param string SQL
-	 * @param array Variables que se reemplazan en  el String de SQL
-	 * @return resultset con los atos traidos del SQL
-	 */
 
-	 public function execSql($strSQL)
-	 {
-		if (!isset($strSQL))
-		{
-			exit;
-		}
-        $res1=pg_send_query($this->conn,$strSQL);
-        $resSql = pg_get_result($this->conn);
-        $this->set_sqlError( pg_result_error($resSql));
-        $this->set_sqlError(preg_replace('/[\x00-\x1F\x80-\xFF\x5E]/', '', $this->sqlError));
-        $error=$this->get_sqlError();
-        if($error!="")
-        {
-            $this->Log->error( $error,$strSQL);
-            $_array['rc']="2";
-            $_array['msgerror']=$error;
-        }
-        else{
-            $_array['rc']="0";
-            $_array['msgerror']="";
-            $this->cantReg=pg_num_rows($resSql);
-            $_array['cuenta']=$this->cantReg;
-            $limite=" limit 10";
-        }
-        
-        $_array['info']= pg_fetch_all($resSql, PGSQL_ASSOC);		
-		
-		return $_array;
-	
-	}
 
-	
-
-	public function errX($res,$strsql)
+	public function execSql($strSQL)
 	{
-		if ($res['rc']!="0") {
-			
-			$dato['info']=$strsql;
-			$dato['msg']="Error en instrucción ";
-			$dato['rc']="2";
-			$dato['msgerror']=$res['msgerror'];
-            $this->Log->error("COD_INSERT - ". $strsql,$dato);
+		try{
+			if (!isset($strSQL))
+			{
+				exit;
+			}
+			$res1=pg_send_query($this->conn,$strSQL);
+			$resSql = pg_get_result($this->conn);
+			// $this->set_sqlError( pg_result_error($resSql));
+			// $this->set_sqlError(preg_replace('/[\x00-\x1F\x80-\xFF\x5E]/', '', $this->sqlError));
+			$error=pg_result_error($resSql);
+			if($error!="")
+			{
+				
+				$this->Log->error( $error,$strSQL);
+				// $_array['rc']="2";
+				// $_array['msgerror']=$error;
+				return new Respuesta(false, null, "DB_ERROR", "mal");
+			}
+			$_array['cuenta']=pg_num_rows($resSql);
+			return new Respuesta(true, pg_fetch_all($resSql, PGSQL_ASSOC));			
+		}catch(Exception $e){
+			return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
 		}
-		else{
-			$dato=$res;
-		}
-		return $dato;
+	
 	}
 }
+	
+
+// 	public function errX($res,$strsql)
+// 	{
+// 		if ($res['rc']!="0") {
+			
+// 			$dato['info']=$strsql;
+// 			$dato['msg']="Error en instrucción ";
+// 			$dato['rc']="2";
+// 			$dato['msgerror']=$res['msgerror'];
+//             $this->Log->error("COD_INSERT - ". $strsql,$dato);
+// 		}
+// 		else{
+// 			$dato=$res;
+// 		}
+// 		return $dato;
+// 	}
+// }
 //-------------------------------------------------------
- $base=new BD();
- $resultado=$base->execSql("select * from joacosch.usuarios");
- var_dump($resultado);
+//  $base=new BD();
+//  $resultado=$base->execSql("select * from joacosch.ejercicios");
+//  var_dump($resultado);
 
 
 	/**

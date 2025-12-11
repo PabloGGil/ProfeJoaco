@@ -5,11 +5,11 @@ class Usuario{
     public function __construct(){
 
     }
-    public function EncontrarTodos(){
+    public function ListarTodos(){
 
     }
 
-    public function EncontrarPorId($id){
+    public function BuscarPorId($id){
 
     }
 

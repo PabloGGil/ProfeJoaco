@@ -438,22 +438,29 @@
             margin-top: 40px;
         }
 
-/* .submenu {
-    display: none;
+/* Submenú oculto por defecto */
+.submenu {
+    display: none;  /* Cambia de 'block' a 'none' */
     position: absolute;
     list-style: none;
     padding: 0;
     margin: 0;
     background: #eee;
+    min-width: 200px; /* Opcional: para que no sea muy estrecho */
+    z-index: 1000; /* Asegura que esté sobre otros elementos */
 }
-/* 
+
+/* Muestra el submenú cuando el padre tiene clase 'open' */
 .has-submenu.open .submenu {
-    display: block;
-} */
-/* .menu-item:hover .submenu {
     display: block;
 }
 
+/* Muestra el submenú al hacer hover */
+.has-submenu:hover .submenu {
+    display: block;
+}
+
+/* Estilos para los items del submenú */
 .submenu li {
     list-style: none;
 }
@@ -463,10 +470,74 @@
     padding: 10px 20px;
     text-decoration: none;
     color: #333;
+    white-space: nowrap; /* Evita que el texto se divida */
 }
 
 .submenu a:hover,
 .submenu a.active {
     background-color: #f0f0f0;
 }
-  */
+
+/* Estilo para el enlace principal */
+.has-submenu > a {
+    position: relative; /* Para posicionar flecha o indicador */
+    padding-right: 25px; /* Espacio para flecha */
+}
+
+/* Opcional: agregar flecha indicadora */
+.has-submenu > a::after {
+    content: '▼';
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.has-submenu.open > a::after {
+    content: '▲'; /* Cambia flecha cuando está abierto */
+}
+Para expandir/colapsar con JavaScript:
+Si quieres que funcione con clic (además de hover), agrega:
+
+javascript
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.has-submenu > a');
+    
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault(); // Previene la navegación del #
+            
+            // Cierra otros submenús abiertos
+            document.querySelectorAll('.has-submenu.open').forEach(openItem => {
+                if (openItem !== this.parentElement) {
+                    openItem.classList.remove('open');
+                }
+            });
+            
+            // Abre/cierra el submenú actual
+            this.parentElement.classList.toggle('open');
+        });
+    });
+    
+    // Cerrar submenú al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.has-submenu')) {
+            document.querySelectorAll('.has-submenu.open').forEach(item => {
+                item.classList.remove('open');
+            });
+        }
+    });
+});
+
+.submenu {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.has-submenu:hover .submenu,
+.has-submenu.open .submenu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+

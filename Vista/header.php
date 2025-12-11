@@ -31,13 +31,13 @@
                 <li><a href="planesEntrenamiento.php">Planes de  Entrenamiento</a></li>
                 <li><a href="registro.php">Registrate</a></li>
                 <li><a href="login.php">Ingresar</a></li>
-                <li class="menu-item">
+                <li class="has-submenu ">
                 
                     <a href="#" id="usuarios-menu">Administracion</a>
                     <!-- Submenú (puede estar oculto inicialmente con CSS) -->
-                    <ul class="submenu">
+                    <ul class=" submenu">
                         <li><a href="AdminUsuario.php" id="nav-list">Usuarios</a></li>
-                        <!-- <li><a href="AdminUsuario.php" id="user-form-section">Agregar Usuario</a></li> -->
+                        <li><a href="AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
                     </ul>
                 </li>
         

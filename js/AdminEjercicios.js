@@ -1,20 +1,18 @@
     const UrlBase = "/vista/Ajax.php";
-    // localStorage.removeItem('users');
-    // localStorage.removeItem('ejercicios');
-    let users = JSON.parse(localStorage.getItem('users')) || [
+    let objetos = JSON.parse(localStorage.getItem('ejercicios')) || [
             {
                 id: 1,
-                nombre: 'Ana',
-                apellido: 'García',
-                correo: 'ana.garcia@example.com',
-                fechaNacimiento: '1990-05-15'
+                musculo: 'Ana',
+                ejercicio: 'García',
+                explicacion: 'ana.garcia@example.com',
+               
             },
             {
                 id: 2,
-                nombre: 'Carlos',
-                apellido: 'López',
-                correo: 'carlos.lopez@example.com',
-                fechaNacimiento: '1985-11-22'
+                musculo: 'Carlos',
+                ejercicio: 'López',
+                explicacion: 'carlos.lopez@example.com',
+                
             }
         ];
         
@@ -26,8 +24,8 @@
     const enviarBtn = document.getElementById('submit-btn');
     const cancelarBtn = document.getElementById('cancel-btn');
     const listaContainer = document.getElementById('users-container');
-    const formularioSeccion = document.getElementById('user-form-section');
-    const listaSeccion = document.getElementById('users-list-section');
+    const seccionFormulario = document.getElementById('user-form-section');
+    const seccionLista = document.getElementById('users-list-section');
     
         
     // Inicialización
@@ -53,57 +51,57 @@
     function handleFormSubmit(e) {
     
         const formData = new FormData(formulario);
-        const userData = {
-            nombre: formData.get('nombre'),
-            apellido: formData.get('apellido'),
-            correo: formData.get('correo'),
-            fechaNacimiento: formData.get('fechaNacimiento')
+        const dataObj = {
+            musculo: formData.get('musculo'),
+            ejercicio: formData.get('ejercicio'),
+            explicacion: formData.get('explicacion'),
+           
         };
         
         if (currentEditingId) {
             // Actualizar usuario existente
-            updateUser(currentEditingId, userData);
+            updateUser(currentEditingId, dataObj);
         } else {
             // Crear nuevo usuario
-            createUser(userData);
+            createUser(dataObj);
         }
     }
         
     // Crear nuevo usuario
-    function createUser(userData) {
+    function createUser(dataObj) {
         const newUser = {
             id: Date.now(), // ID único basado en timestamp
-            ...userData
+            ...dataObj
         };
         console.log(newUser);
-        users.push(newUser);
-        console.log(users);
+        objetos.push(newUser);
+        console.log(objetos);
         saveUsers();
         Listar();
         MostrarSeccion('list');
         
-        alert('Usuario agregado correctamente');
+        alert('Ejercicio agregado correctamente');
     }
         
     // Actualizar usuario existente
-    function updateUser(id, userData) {
-        const userIndex = users.findIndex(user => user.id === id);
+    function updateUser(id, dataObj) {
+        const userIndex = objetos.findIndex(obj => obj.id === id);
         
         if (userIndex !== -1) {
-            users[userIndex] = { id, ...userData };
+            objetos[userIndex] = { id, ...dataObj };
             saveUsers();
             Listar();
             resetForm();
             MostrarSeccion('list');
             
-            alert('Usuario actualizado correctamente');
+            alert('Ejercicio actualizado correctamente');
         }
     }
     
     // Eliminar usuario
     function deleteUser(id) {
-        if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-            users = users.filter(user => user.id !== id);
+        if (confirm('¿Estás seguro de que deseas eliminar este ejercicio?')) {
+            objetos = objetos.filter(obj => obj.id !== id);
             saveUsers();
             Listar();
             
@@ -116,17 +114,17 @@
         
     // Editar usuario
     function editUser(id) {
-        const user = users.find(user => user.id === id);
+        const ej = objetos.find(ej => ej.id === id);
         
-        if (user) {
-            document.getElementById('nombre').value = user.nombre;
-            document.getElementById('apellido').value = user.apellido;
-            document.getElementById('correo').value = user.correo;
-            document.getElementById('fechaNacimiento').value = user.fechaNacimiento;
+        if (ej) {
+            document.getElementById('musculo').value = ej.musculo;
+            document.getElementById('ejercicio').value = ej.ejercicio;
+            document.getElementById('explicacion').value = ej.explicacion;
+            
             
             currentEditingId = id;
-            tituloFormulario.textContent = 'Editar Usuario';
-            enviarBtn.textContent = 'Actualizar Usuario';
+            tituloFormulario.textContent = 'Editar Ejercicio';
+            enviarBtn.textContent = 'Actualizar Ejercicio';
             cancelarBtn.style.display = 'block';
             
             MostrarSeccion('form');
@@ -137,20 +135,18 @@
     function resetForm() {
         formulario.reset();
         currentEditingId = null;
-        tituloFormulario.textContent = 'Agregar Nuevo Usuario';
-        enviarBtn.textContent = 'Agregar Usuario';
+        tituloFormulario.textContent = 'Agregar Nuevo Ejercicio';
+        enviarBtn.textContent = 'Agregar Ejercicio';
         cancelarBtn.style.display = 'none';
     }
         
     // Renderizar lista de usuarios
-    async function Listar() {
-       
-       console.log(users);
-        // console.log(await getData('ListarUsuarios'));
-        rta=await getData('ListarUsuarios');
-        users=rta.informacion;
-        if (users.length === 0) {
-            listaContainer.innerHTML = '<div class="no-users">No hay usuarios registrados</div>';
+    function Listar() {
+        console.log(getData());
+        console.log(objetos);
+        objetos=getData();
+        if (objetos.length === 0) {
+            listaContainer.innerHTML = '<div class="no-users">No hay Ejercicio registrados</div>';
             return;
         }
         
@@ -158,28 +154,26 @@
             <table class="users-table">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Correo</th>
-                        <th>Fecha Nacimiento</th>
+                        <th>Musculo</th>
+                        <th>Ejercicio</th>
+                        <th>Explicacion</th>                       
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
-        // <td>${formatDate(user.fechaNacimiento)}
-        users.forEach(user => {
+  
+        objetos.forEach(obj => {
             tableHTML += `
                 <tr>
-                    <td>${user.nombre}</td>
-                    <td>${user.apellido}</td>
-                    <td>${user.correo}</td>
-                    
-                    <td>${formatDate(user.fechaNacimiento)}</td>
+                    <td>${obj.musculo}</td>
+                    <td>${obj.ejercicio}</td>
+                    <td>${obj.explicacion}</td>
+
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-edit" onclick="editUser(${user.id})">Editar</button>
-                            <button class="btn-delete" onclick="deleteUser(${user.id})">Eliminar</button>
+                            <button class="btn-edit" onclick="editUser(${obj.id})">Editar</button>
+                            <button class="btn-delete" onclick="deleteUser(${obj.id})">Eliminar</button>
                         </div>
                     </td>
                 </tr>
@@ -198,53 +192,66 @@
     function formatDate(fechaStr) {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' , timeZone:'UTC'};
         return new Date(fechaStr).toLocaleDateString('es-ES', options);
-
     }
     
     // Guardar usuarios en localStorage
     function saveUsers() {
-        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('ejercicios', JSON.stringify(objetos));
     }
         
     // Mostrar sección específica
     function MostrarSeccion(section) {
         if (section === 'form') {
             console.log("Mostrando formulario");
-            formularioSeccion.classList.remove('hidden');
-            listaSeccion.classList.add('hidden');
+            seccionFormulario.classList.remove('hidden');
+            seccionLista.classList.add('hidden');
 
         } else if (section === 'list') {
             console.log("Mostrando lista");
-            formularioSeccion.classList.add('hidden');
-            listaSeccion.classList.remove('hidden');
+            seccionFormulario.classList.add('hidden');
+            seccionLista.classList.remove('hidden');
             Listar();
         }
     }
         
-    async function getData($servicio) {
-    try{
-        url=UrlBase + '?q='+$servicio;
-        opciones= {
-                    method: 'GET', // Specify the HTTP method
-                    headers: {
-                        'Content-Type': 'application/json', // Indicate the content type
-                    },
-        }
-        const response= await fetch(url,opciones)
-        // .then(response => {return response.json()}) 
-        // .then(json => console.log(json));
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
+     function PostData(postData){
+        try{
+            opciones= {
+                        method: 'POST', // Specify the HTTP method
+                        headers: {
+                            'Content-Type': 'application/json', // Indicate the content type
+                        },
+                        body: JSON.stringify(postData), // Convert data to JSON string
+                    }
+            
+            const respuesta= fetch(UrlBase, opciones)
+
+            .then(response=> {
+                return  respuesta.json();
+                throw new Error(`Error HTTP: ${respresponseuesta.status}`);
+            });
+        
+            
+        } catch (error) {
+            console.error('Error en POST:', error);
+            throw error;
         }
         
-        return await response.json();
-    
-    } catch (error) {
-        console.error('Error en GET:', error);
-        throw error;
     }
+    function getData($servicio) {
+   
+        url=UrlBase + '?q='+$servicio;
+         opciones= {
+                        method: 'GET', // Specify the HTTP method
+                        headers: {
+                            'Content-Type': 'application/json', // Indicate the content type
+                        },
+                    }
+        fetch(url,opciones)
+        .then(response => response.json()) 
+        .then(json => console.log(json));
     
-    }
+}
     // Hacer las funciones disponibles globalmente para los event listeners en línea
     window.editUser = editUser;
     window.deleteUser = deleteUser;

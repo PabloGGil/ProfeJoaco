@@ -16,7 +16,6 @@
         <host>192.168.1.34</host>
         <port>5433</port>
         <user>joaco</user>
-        <!-- <dbpass>b34daf48ab46da6dbe56947a97467f4a7c37</dbpass> -->
         <dbpass>b04db9489846d96dc456cb7ad546</dbpass>
         <charset>UTF8</charset>
     </database>

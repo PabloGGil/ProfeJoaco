@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Clase de Conexion contra la base de datos de la aplicacion
- * Utiliza patron Singleton para asegurar una unica conexion para toda 
- * aplicacion.
+ * Clase de Conexion contra la base de datos Postgres de la aplicacion
+
  */
 class DB_pg_connection {
 
