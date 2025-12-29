@@ -10,7 +10,7 @@
             color: #333;
             line-height: 1.6;
         }
-        
+ 
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -494,38 +494,6 @@
 .has-submenu.open > a::after {
     content: '▲'; /* Cambia flecha cuando está abierto */
 }
-Para expandir/colapsar con JavaScript:
-Si quieres que funcione con clic (además de hover), agrega:
-
-javascript
-document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('.has-submenu > a');
-    
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault(); // Previene la navegación del #
-            
-            // Cierra otros submenús abiertos
-            document.querySelectorAll('.has-submenu.open').forEach(openItem => {
-                if (openItem !== this.parentElement) {
-                    openItem.classList.remove('open');
-                }
-            });
-            
-            // Abre/cierra el submenú actual
-            this.parentElement.classList.toggle('open');
-        });
-    });
-    
-    // Cerrar submenú al hacer clic fuera
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.has-submenu')) {
-            document.querySelectorAll('.has-submenu.open').forEach(item => {
-                item.classList.remove('open');
-            });
-        }
-    });
-});
 
 .submenu {
     display: none;
@@ -541,3 +509,27 @@ document.addEventListener('DOMContentLoaded', function() {
     transform: translateY(0);
 }
 
+.alert {
+            padding: 15px;
+            border-radius: 5px;
+            /* margin-bottom: 20px; */
+}
+
+.alert-danger {
+    background-color: #ea091e;
+    color: #f9f6f6;
+    border: 1px solid #f5c6cb;
+    font-size: larger;
+    text-align: center;
+}
+
+.container_error {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+} 
+      

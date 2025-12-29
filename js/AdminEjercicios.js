@@ -1,20 +1,5 @@
     const UrlBase = "/vista/Ajax.php";
-    let objetos = JSON.parse(localStorage.getItem('ejercicios')) || [
-            {
-                id: 1,
-                musculo: 'Ana',
-                ejercicio: 'García',
-                explicacion: 'ana.garcia@example.com',
-               
-            },
-            {
-                id: 2,
-                musculo: 'Carlos',
-                ejercicio: 'López',
-                explicacion: 'carlos.lopez@example.com',
-                
-            }
-        ];
+   
         
     // Variables globales
     let currentEditingId = null;
@@ -26,11 +11,13 @@
     const listaContainer = document.getElementById('users-container');
     const seccionFormulario = document.getElementById('user-form-section');
     const seccionLista = document.getElementById('users-list-section');
+    const containerError=document.getElementById('container-error');
     
         
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {           
         setupEventListeners();
+        containerError.classList.add('hidden');
         Listar();
     });
         
@@ -40,6 +27,7 @@
         agregarBtn.addEventListener('click',  (e) => {
            
             MostrarSeccion('form');
+               resetForm();
         });
 
         cancelarBtn.addEventListener('click',  (e) => {
@@ -54,29 +42,44 @@
         const dataObj = {
             musculo: formData.get('musculo'),
             ejercicio: formData.get('ejercicio'),
-            explicacion: formData.get('explicacion'),
-           
+            explicacion: formData.get('explicacion'),           
         };
         
         if (currentEditingId) {
             // Actualizar usuario existente
-            updateUser(currentEditingId, dataObj);
+            updateEjercicio(currentEditingId, dataObj);
         } else {
             // Crear nuevo usuario
-            createUser(dataObj);
+            createEjercicio(dataObj);
         }
     }
+    async function updateEjercicio(id, data) {
         
+        data['id']=id;
+        data['q']='EditarEjercicio';
+        if (id !== -1) {
+            
+            rta=await PostData(data);
+            Listar();
+          
+            MostrarSeccion('list');
+            
+            alert('Usuario actualizado correctamente');
+        }
+    }
     // Crear nuevo usuario
-    function createUser(dataObj) {
-        const newUser = {
-            id: Date.now(), // ID único basado en timestamp
-            ...dataObj
+    async function createEjercicio(dataObj) {
+        const newEjercicio = {
+            // id: Date.now(), // ID único basado en timestamp
+            ...dataObj,
+            q:'CrearEjercicio'
         };
-        console.log(newUser);
-        objetos.push(newUser);
+     
+        // currentEditingId=null;
+        // console.log(newEjercicio);
+        rta=await PostData(newEjercicio);
         console.log(objetos);
-        saveUsers();
+       
         Listar();
         MostrarSeccion('list');
         
@@ -84,25 +87,34 @@
     }
         
     // Actualizar usuario existente
-    function updateUser(id, dataObj) {
-        const userIndex = objetos.findIndex(obj => obj.id === id);
+    function editEjercicio(id) {
+                
+        const row = document.querySelectorAll('#tr-'+id);
+        const datos = Array.from(row[0].cells)
+        const col=datos.map(td => td.innerText);
         
-        if (userIndex !== -1) {
-            objetos[userIndex] = { id, ...dataObj };
-            saveUsers();
-            Listar();
-            resetForm();
-            MostrarSeccion('list');
+        currentEditingId = id;
+        tituloFormulario.textContent = 'Editar Ejercicio';
+        enviarBtn.textContent = 'Actualizar Ejercicio';
+        cancelarBtn.style.display = 'block';
             
-            alert('Ejercicio actualizado correctamente');
-        }
+        MostrarSeccion('form');
+        document.getElementById('musculo').value = col[0];//datos[0];
+        document.getElementById('ejercicio').value = col[1];
+        document.getElementById('explicacion').value = col[2];
+ 
     }
     
     // Eliminar usuario
-    function deleteUser(id) {
+    async function deleteEjercicio(id) {
         if (confirm('¿Estás seguro de que deseas eliminar este ejercicio?')) {
-            objetos = objetos.filter(obj => obj.id !== id);
-            saveUsers();
+            
+            const delEj = {
+                id:id, // ID único basado en timestamp
+            
+                q:'EliminarEjercicio'
+            };
+            rta=await PostData(delEj);
             Listar();
             
             // Si estábamos editando este usuario, resetear el formulario
@@ -112,40 +124,25 @@
         }
     }
         
-    // Editar usuario
-    function editUser(id) {
-        const ej = objetos.find(ej => ej.id === id);
-        
-        if (ej) {
-            document.getElementById('musculo').value = ej.musculo;
-            document.getElementById('ejercicio').value = ej.ejercicio;
-            document.getElementById('explicacion').value = ej.explicacion;
-            
-            
-            currentEditingId = id;
-            tituloFormulario.textContent = 'Editar Ejercicio';
-            enviarBtn.textContent = 'Actualizar Ejercicio';
-            cancelarBtn.style.display = 'block';
-            
-            MostrarSeccion('form');
-        }
-    }
-        
     // Resetear formulario
     function resetForm() {
         formulario.reset();
         currentEditingId = null;
         tituloFormulario.textContent = 'Agregar Nuevo Ejercicio';
         enviarBtn.textContent = 'Agregar Ejercicio';
-        cancelarBtn.style.display = 'none';
+        // cancelarBtn.style.display = 'none';
     }
         
-    // Renderizar lista de usuarios
-    function Listar() {
-        console.log(getData());
+    // Renderizar lista de Ejercicios
+    async function Listar() {
+        
+        objetos=await getData('ListarEjercicios');
         console.log(objetos);
-        objetos=getData();
-        if (objetos.length === 0) {
+        if(!objetos.success){
+            MostrarMensaje(objetos.errorMessage,objetos.errorCode);
+            return;
+        }
+        if (objetos.data.length === 0) {
             listaContainer.innerHTML = '<div class="no-users">No hay Ejercicio registrados</div>';
             return;
         }
@@ -163,23 +160,25 @@
                 <tbody>
         `;
   
-        objetos.forEach(obj => {
+        objetos.data.forEach(obj => {
             tableHTML += `
-                <tr>
+                <tr id=tr-${obj.id}>
                     <td>${obj.musculo}</td>
                     <td>${obj.ejercicio}</td>
                     <td>${obj.explicacion}</td>
 
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-edit" onclick="editUser(${obj.id})">Editar</button>
-                            <button class="btn-delete" onclick="deleteUser(${obj.id})">Eliminar</button>
+                            <button id=fila-${obj.id} class="btn-edit" onclick="editEjercicio(${obj.id})">Editar</button>
+                            <button id=fila-${obj.id} class="btn-delete" onclick="deleteEjercicio(${obj.id})">Eliminar</button>
                         </div>
                     </td>
                 </tr>
             `;
         });
-        
+                            //      <button id=edt'${obj.id}' class="btn-edit" onclick="editEjercicio(${obj.id})">Editar</button>
+                            // <button id=del'${obj.id}' class="btn-delete" onclick="deleteEjercicio(${obj.id})">Eliminar</button>
+  
         tableHTML += `
                 </tbody>
             </table>
@@ -195,9 +194,9 @@
     }
     
     // Guardar usuarios en localStorage
-    function saveUsers() {
-        localStorage.setItem('ejercicios', JSON.stringify(objetos));
-    }
+    // function saveUsers() {
+    //     localStorage.setItem('ejercicios', JSON.stringify(objetos));
+    // }
         
     // Mostrar sección específica
     function MostrarSeccion(section) {
@@ -214,22 +213,25 @@
         }
     }
         
-     function PostData(postData){
+    async function PostData(postData){
         try{
             opciones= {
-                        method: 'POST', // Specify the HTTP method
+                        method: 'POST', 
                         headers: {
-                            'Content-Type': 'application/json', // Indicate the content type
+                            'Content-Type': 'application/json', 
                         },
-                        body: JSON.stringify(postData), // Convert data to JSON string
+                        body: JSON.stringify(postData), 
                     }
             
-            const respuesta= fetch(UrlBase, opciones)
+            const respuesta= await fetch(UrlBase, opciones)
 
-            .then(response=> {
-                return  respuesta.json();
-                throw new Error(`Error HTTP: ${respresponseuesta.status}`);
-            });
+            if (!respuesta.ok) {
+                MostrarMensaje(respuesta.errorCode,"alert-danger");
+                throw new Error(`Error HTTP: ${respuesta.status}`);
+                console.log(respuesta);
+            }
+            console.log(respuesta);
+            return await respuesta.json();
         
             
         } catch (error) {
@@ -238,20 +240,37 @@
         }
         
     }
-    function getData($servicio) {
-   
+    async function getData($servicio) {
+    try{
         url=UrlBase + '?q='+$servicio;
-         opciones= {
-                        method: 'GET', // Specify the HTTP method
-                        headers: {
-                            'Content-Type': 'application/json', // Indicate the content type
-                        },
-                    }
-        fetch(url,opciones)
-        .then(response => response.json()) 
-        .then(json => console.log(json));
+        opciones= {
+                    method: 'GET', 
+                    headers: {
+                        'Content-Type': 'application/json', 
+                    },
+        }
+        const response= await fetch(url,opciones)
+         if (!response.ok) {
+            MostrarMensaje(response.errorCode,"alert-danger");
+            throw new Error(`Error HTTP: ${response.status}`);
+            console.log(response);
+         }
+        console.log(response);
+        return await response.json();
     
-}
+        } catch (error) {
+            console.log('Error en GET:', error);
+ 
+        }
+    
+    }
+
+    function MostrarMensaje(texto,tipo = 'success'){
+        containerError.classList.remove('hidden');
+        const div = document.getElementById('mensaje');
+        div.innerHTML = `<div class="alert-danger" >${tipo}</div>`;
+        div.innerHTML  += `<div class="alert" >${texto}</div>`;
+    }
     // Hacer las funciones disponibles globalmente para los event listeners en línea
-    window.editUser = editUser;
-    window.deleteUser = deleteUser;
+    window.editEjercicio = editEjercicio;
+    window.deleteEjercicio = deleteEjercicio;

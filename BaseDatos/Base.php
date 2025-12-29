@@ -7,20 +7,6 @@ include_once($path_cli."Sistema/CargaConfiguracion.php");
 include_once($path_cli."Sistema/Respuesta.php");
 
 
-/**
- * Ver 1.0 del 28-01-2011
- * Incluye registro de error de SQL en tabla de errores sqlerror, on fecha de error y texto del sql
- * Clase basica de trabajo con objetos de base de datos
- * utilizar por extencion.
- * Genera conectividad con la Base de datos
- *
- * Ver 1.2 del 11/07/2011
- * Incluye la lectura del parametro ROOT_PATH
- * 
- * Ver 1.3 del 08/10/2011
- * INcluye la actualizacion del registro en la tabla de log
- */
-
 class BD {
 
 	private $conn;
@@ -65,7 +51,7 @@ class BD {
 		else{
 			$this->dato=array(0);
 		}
-		var_dump($this->conn);
+		// var_dump($this->conn);
 		
 		$this->cantReg=0;
 	}
@@ -99,7 +85,7 @@ class BD {
 		return $this->cantReg;
 	}
 
-
+	
 	public function execSql($strSQL)
 	{
 		try{
@@ -121,14 +107,169 @@ class BD {
 				return new Respuesta(false, null, "DB_ERROR", "mal");
 			}
 			$_array['cuenta']=pg_num_rows($resSql);
-			return new Respuesta(true, pg_fetch_all($resSql, PGSQL_ASSOC));			
+			return new Respuesta(true, pg_fetch_all($resSql, PGSQL_ASSOC),"","");			
 		}catch(Exception $e){
 			return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
 		}
 	
 	}
+private function executePrepared(string $sql, array $params) {
+        // Escapar parámetros para prevenir SQL injection
+        $escapedParams = array_map(function($param) {
+            if ($param === null) return 'NULL';
+            if (is_bool($param)) return $param ? 'TRUE' : 'FALSE';
+            return pg_escape_literal($this->conn, $param);
+        }, $params);
+        
+        // Reemplazar placeholders
+        $query = $sql;
+        $i = 1;
+        foreach ($escapedParams as $param) {
+            $query = preg_replace('/\$\d+/', $param, $query, 1);
+            $i++;
+        }
+        
+        return pg_query($this->conn, $query);
+    }
+
+	public function query(string $sql, array $params = []) {
+        try {
+            $startTime = microtime(true);
+            $result=false;
+			$error="";
+            // Si hay parámetros, usar consulta preparada
+            if (!empty($params)) {
+                $result = $this->executePrepared($sql, $params);
+            } else {
+                $result = pg_query($this->conn, $sql);
+            }
+            
+            $executionTime = microtime(true) - $startTime;
+            
+            if ($result === false) {
+                $error = pg_last_error($this->conn);
+                $this->Log->error("Error SQL", [
+                    'sql' => $sql,
+                    'params' => $params,
+                    'error' => $error,
+                    'time' => round($executionTime * 1000, 2) . 'ms'
+                ]);
+                $exito=false;
+                throw new DatabaseException($error);
+            }else{
+				$exito=true;
+			}
+            
+            $this->cantReg = pg_affected_rows($result) ?: pg_num_rows($result);
+            
+            // Log para consultas lentas
+            if ($executionTime > 2.0) { // Más de 1 segundo
+                $this->Log->info("Consulta lenta", [
+                    'sql' => $sql,
+                    'time' => round($executionTime * 1000, 2) . 'ms'
+                ]);
+            }
+			
+			$arrResult= new DatabaseResult($result);
+			$resultado=new Respuesta($exito,$arrResult->fetchAll(),"",$error);
+            return $resultado;
+        } catch (Exception $e) {
+            $this->Log->error("Error en consulta", [
+                'sql' => $sql,
+                'params' => $params,
+                'exception' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
+			
+	public function Insert(string $table, array $data) {
+        $columns = implode(', ', array_keys($data));
+        $placeholders = '$' . implode(', $', range(1, count($data)));
+        
+        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders}) RETURNING id";
+        
+        $result = $this->query($sql, array_values($data));
+        
+        // $arrResult= new DatabaseResult($result);
+        // $fila= $arrResult->fetchAll();
+        return $result;
+    }
+
+
+	public function Update(string $table, array $data, array $where):Respuesta {
+        $setParts = [];
+        $i = 1;
+        
+        foreach ($data as $column => $value) {
+            $setParts[] = "{$column} = \${$i}";
+            $i++;
+        }
+        
+        $setClause = implode(', ', $setParts);
+        
+        $whereParts = [];
+        foreach ($where as $column => $value) {
+            $whereParts[] = "{$column} = \${$i}";
+            $i++;
+        }
+        
+        $whereClause = implode(' AND ', $whereParts);
+        $params = array_merge(array_values($data), array_values($where));
+        
+        $sql = "UPDATE {$table} SET {$setClause} WHERE {$whereClause} RETURNING *";
+        
+        $result = $this->query($sql, $params);
+        return $result;
+    }
+
+	public function Delete(string $table, $id){
+		$sql = "DELETE FROM {$table} WHERE ID={$id}";
+        
+        $result = $this->query($sql);
+		return $result;
+	}
 }
 	
+class DatabaseResult {
+    private $result;
+    
+    public function __construct($result) {
+        $this->result = $result;
+    }
+    
+    public function fetchAll(): array {
+        $arr=pg_fetch_all($this->result) ?: [];
+		return $arr;
+
+    }
+    
+    public function fetchAssoc(): ?array {
+        $row = pg_fetch_assoc($this->result);
+        return $row ?: null;
+    }
+    
+    public function fetchColumn(int $column = 0): array {
+        $rows = [];
+        while ($row = pg_fetch_row($this->result)) {
+            $rows[] = $row[$column];
+        }
+        return $rows;
+    }
+    
+    public function count(): int {
+        return pg_num_rows($this->result);
+    }
+    
+    public function free(): void {
+        if ($this->result) {
+            pg_free_result($this->result);
+        }
+    }
+}
+
+class DatabaseException extends Exception {}
 
 // 	public function errX($res,$strsql)
 // 	{
@@ -147,9 +288,7 @@ class BD {
 // 	}
 // }
 //-------------------------------------------------------
-//  $base=new BD();
-//  $resultado=$base->execSql("select * from joacosch.ejercicios");
-//  var_dump($resultado);
+
 
 
 	/**

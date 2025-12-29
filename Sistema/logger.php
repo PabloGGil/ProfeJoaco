@@ -1,7 +1,7 @@
 <?php
 $path_cli=__DIR__.'/../';
 define ('ENTORNO','Desarrollo');
-include_once($path_cli."Sistema/logger.php");
+// include_once($path_cli."Sistema/logger.php");
 
 class Logger {
     private $log_file;
@@ -13,7 +13,7 @@ class Logger {
          $this->log_file=__DIR__.'/../' .$conf->leeParametro("logfile");
         // $this->log_file = $log_file;
         $this->enabled = $enabled;
-        echo $this->log_file;
+        // echo $this->log_file;
     }
     
     public function log($message, $level = 'INFO', $context = []) {
@@ -67,7 +67,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
     exit;
 }
 
-set_error_handler('errorHandler');
+// set_error_handler('errorHandler');
 
 // Manejo de excepciones
 function exceptionHandler($exception) {
@@ -83,5 +83,5 @@ function exceptionHandler($exception) {
     exit;
 }
 
-set_exception_handler('exceptionHandler');
+// set_exception_handler('exceptionHandler');
 ?>

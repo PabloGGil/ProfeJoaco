@@ -1,6 +1,8 @@
 <?php
 
 include_once '../Controladores/UsuarioController.php';
+include_once '../Controladores/EjercicioController.php';
+include_once '../Sistema/Respuesta.php';
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -12,13 +14,13 @@ $mensaje="";
 $error="";
 $info=[];
 
-class Respuesta{
-    public $estado=false;
-    public $mensaje="";
-    public $error="";
-    public $info=[];
-}
-$respuesta=new Respuesta();
+// class Respuesta{
+//     public $estado=false;
+//     public $mensaje="";
+//     public $error="";
+//     public $info=[];
+// }
+$respuesta=new Respuesta(false,null,null,null);
 
 class Usuario {
                 public $id= 1;
@@ -28,7 +30,7 @@ class Usuario {
                 public $fechaNacimiento= '1990-05-15';
             }
 
-if($_GET['q']){
+if(isset($_GET['q'])){
    switch($_GET['q'])
     {
         //Usuarios
@@ -41,6 +43,9 @@ if($_GET['q']){
             break;
         //Ejercicios
         case 'ListarEjercicios':
+            $ejercicio=new EjercicioController();
+            $respuesta=$ejercicio->Index();
+            $mensaje="Lista de usuarios"; 
             break;
         case 'MostrarEjercicio':
             break;
@@ -74,12 +79,18 @@ if($_GET['q']){
             break;
         //Ejercicios
         case 'CrearEjercicio':
-          
+            $ejercicio=new EjercicioController();
+            $respuesta=$ejercicio->Crear($params);
             break;
         case 'EditarEjercicio':
+            $ejercicio=new EjercicioController();
+            $respuesta=$ejercicio->Actualizar($params);
             break;
         case 'EliminarEjercicio':
+            $ejercicio=new EjercicioController();
+            $respuesta=$ejercicio->Eliminar($params['id']);
             break;
+           
         //Planes
 
         case 'CrearPlan':
@@ -113,9 +124,8 @@ if($_GET['q']){
     }
 }
 
-$respuesta->estado=$estado;
-$respuesta->mensaje=$mensaje;
-$respuesta->error=$error;
-$respuesta->informacion=$data;
+
+header('Content-Type: application/json');
 echo json_encode($respuesta);
+exit();
 

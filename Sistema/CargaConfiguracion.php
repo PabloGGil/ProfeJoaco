@@ -257,13 +257,13 @@ class Encriptador
 
 
 
-/*
-$crip=new Encriptador();
-$llave=$conf->leeParametro("key");
-echo "llave:  ".$llave;//"RrtzCzcCmXBZSCZz";	
-$cod=$crip->encripta($llave,"joaquin");
-echo "pass encriptada:  " .$cod."<br>";
-*/
+
+// $crip=new Encriptador();
+// $llave=$conf->leeParametro("key");
+// echo "llave:  ".$llave;//"RrtzCzcCmXBZSCZz";	
+// $cod=$crip->encripta($llave,"joaco2002");
+// echo "pass encriptada:  " .$cod;
+
 
 /*
 echo "DESENC ---------<br>";

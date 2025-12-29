@@ -1,35 +1,45 @@
 <?php
-    // $data = json_decode(file_get_contents('php://input'), true);
-    // var_dump($data);
+$path_cli=__DIR__.'/../';
+include_once($path_cli."Sistema/Respuesta.php");
+include_once($path_cli."modelo/Ejercicios.php");
+
 class EjercicioController{
 
     //Listar Todos los ejercicios
     public function Index(){
-
+        $ejercicio=new Ejercicios();
+        $ret = $ejercicio->ListarTodos();
+        if(!$ret->success){
+            $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo guardar el usuario.");        
+        }
+        return $ret;
     }
     //Muestra un ejercicio por ID
     public function Mostrar($id){
-        $ejercicio=new Ejercicios();
-        $data = $ejercicio->ListarTodos();
-        $retorno = array('rc' => '0', 'msg' => 'ejercicio encontrado ');
-        return $retorno;
+       
 
     }
 
     // public function Crear($request){
-    public function Crear($request){
-        // $data = json_decode(file_get_contents('php://input'), true);
-        var_dump($request);
-        $retorno = array('rc' => '0', 'msg' => 'ejercicio agregado ');
-        echo json_encode($retorno);
+    public function Crear($data){
+        $ejercicio=new Ejercicios();
+        unset($data['q']);
+        $ret = $ejercicio->Crear($data);
+        return $ret;
     }
 
-    public function Actualizar($id, $request){
-
+    public function Actualizar( $data){
+        $ejercicio=new Ejercicios();
+        unset($data['q']);
+        $ret = $ejercicio->Actualizar($data);
+        return $ret;
     }
 
     public function Eliminar($id){
-
+        $ejercicio=new Ejercicios();
+       
+        $ret = $ejercicio->Eliminar($id);
+        return $ret;
     }
 
     public function getPlanes($id_ejercicio){
