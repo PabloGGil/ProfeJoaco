@@ -4,13 +4,13 @@
     // Variables globales
     let currentEditingId = null;
     const agregarBtn = document.getElementById('add-btn');    
-    const formulario = document.getElementById('user-form');
+    const formulario = document.getElementById('formulario');
     const tituloFormulario = document.getElementById('form-title');
     const enviarBtn = document.getElementById('submit-btn');
     const cancelarBtn = document.getElementById('cancel-btn');
-    const listaContainer = document.getElementById('users-container');
-    const seccionFormulario = document.getElementById('user-form-section');
-    const seccionLista = document.getElementById('users-list-section');
+    const listaContainer = document.getElementById('container-data');
+    const seccionFormulario = document.getElementById('form-section');
+    const seccionLista = document.getElementById('list-section');
     const containerError=document.getElementById('container-error');
     
         
@@ -46,10 +46,10 @@
         };
         
         if (currentEditingId) {
-            // Actualizar usuario existente
+            // Actualizar  existente
             updateEjercicio(currentEditingId, dataObj);
         } else {
-            // Crear nuevo usuario
+            // Crear nuevo 
             createEjercicio(dataObj);
         }
     }
@@ -67,16 +67,15 @@
             alert('Usuario actualizado correctamente');
         }
     }
-    // Crear nuevo usuario
+    // Crear nuevo 
     async function createEjercicio(dataObj) {
         const newEjercicio = {
-            // id: Date.now(), // ID único basado en timestamp
+ 
             ...dataObj,
             q:'CrearEjercicio'
         };
      
-        // currentEditingId=null;
-        // console.log(newEjercicio);
+ 
         rta=await PostData(newEjercicio);
         console.log(objetos);
        
@@ -86,7 +85,7 @@
         alert('Ejercicio agregado correctamente');
     }
         
-    // Actualizar usuario existente
+    // Actualizar 
     function editEjercicio(id) {
                 
         const row = document.querySelectorAll('#tr-'+id);
@@ -105,7 +104,7 @@
  
     }
     
-    // Eliminar usuario
+    // Eliminar 
     async function deleteEjercicio(id) {
         if (confirm('¿Estás seguro de que deseas eliminar este ejercicio?')) {
             
@@ -117,7 +116,7 @@
             rta=await PostData(delEj);
             Listar();
             
-            // Si estábamos editando este usuario, resetear el formulario
+            // Si estábamos editando , resetear el formulario
             if (currentEditingId === id) {
                 resetForm();
             }
@@ -143,12 +142,12 @@
             return;
         }
         if (objetos.data.length === 0) {
-            listaContainer.innerHTML = '<div class="no-users">No hay Ejercicio registrados</div>';
+            listaContainer.innerHTML = '<div class="no-data">No hay Ejercicio registrados</div>';
             return;
         }
         
         let tableHTML = `
-            <table class="users-table">
+            <table class="tabla">
                 <thead>
                     <tr>
                         <th>Musculo</th>
@@ -193,10 +192,6 @@
         return new Date(fechaStr).toLocaleDateString('es-ES', options);
     }
     
-    // Guardar usuarios en localStorage
-    // function saveUsers() {
-    //     localStorage.setItem('ejercicios', JSON.stringify(objetos));
-    // }
         
     // Mostrar sección específica
     function MostrarSeccion(section) {

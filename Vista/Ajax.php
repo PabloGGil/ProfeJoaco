@@ -45,7 +45,7 @@ if(isset($_GET['q'])){
         case 'ListarEjercicios':
             $ejercicio=new EjercicioController();
             $respuesta=$ejercicio->Index();
-            $mensaje="Lista de usuarios"; 
+            $mensaje="Lista de Ejercicios"; 
             break;
         case 'MostrarEjercicio':
             break;
@@ -77,6 +77,7 @@ if(isset($_GET['q'])){
             break;
         case 'EliminarUsuario':
             break;
+
         //Ejercicios
         case 'CrearEjercicio':
             $ejercicio=new EjercicioController();

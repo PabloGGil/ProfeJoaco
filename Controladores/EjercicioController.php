@@ -10,7 +10,7 @@ class EjercicioController{
         $ejercicio=new Ejercicios();
         $ret = $ejercicio->ListarTodos();
         if(!$ret->success){
-            $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo guardar el usuario.");        
+            $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo guardar el Ejercicio.");        
         }
         return $ret;
     }
@@ -20,7 +20,7 @@ class EjercicioController{
 
     }
 
-    // public function Crear($request){
+   
     public function Crear($data){
         $ejercicio=new Ejercicios();
         unset($data['q']);

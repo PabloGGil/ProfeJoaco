@@ -18,7 +18,7 @@ class BD {
 	private $db_charset;
 	private $dato;
 
-	private $textoSql;
+	// private $textoSql;
 	private $ROOT_PATH;
 	
 	private $sqlError;
@@ -27,7 +27,6 @@ class BD {
         
 
 	public function __construct($dato=0){
-		//verifica la existencia del archivo de configuraci�n y el path relativo del mismo para efectuar la inclucion
 		$this->Log=new Logger();
 		BD::setRootPath();
 		$conf= CargaConfiguracion::getInstance('');
@@ -56,19 +55,19 @@ class BD {
 		$this->cantReg=0;
 	}
 
-	public function get_SqlError()
-	{
-		return $this ->sqlError;
-	}
-	public function set_SqlError($str)
-	{
-		$this ->sqlError=$str;
-	}
+	// public function get_SqlError()
+	// {
+	// 	return $this ->sqlError;
+	// }
+	// public function set_SqlError($str)
+	// {
+	// 	$this ->sqlError=$str;
+	// }
 
-	public function get_textoSQL()
-	{
-		return $this->textoSql;
-	}
+	// public function get_textoSQL()
+	// {
+	// 	return $this->textoSql;
+	// }
 
 	protected function getRootPath(){
 		return $this->ROOT_PATH;
@@ -95,8 +94,7 @@ class BD {
 			}
 			$res1=pg_send_query($this->conn,$strSQL);
 			$resSql = pg_get_result($this->conn);
-			// $this->set_sqlError( pg_result_error($resSql));
-			// $this->set_sqlError(preg_replace('/[\x00-\x1F\x80-\xFF\x5E]/', '', $this->sqlError));
+
 			$error=pg_result_error($resSql);
 			if($error!="")
 			{

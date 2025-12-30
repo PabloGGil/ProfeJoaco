@@ -8,11 +8,11 @@
         </div>
         <div class="container">
             <!-- Formulario para agregar/editar usuario -->
-            <section id="user-form-section" class="user-form hidden ">
+            <section id="form-section" class="formulario hidden ">
                 <div class="form-container">
                     <h2 id="form-title">Agregar Nuevo Ejercicio</h2>
                     
-                    <form id="user-form">
+                    <form id="formulario">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="musculo">Musculo</label>
@@ -37,11 +37,11 @@
             
             <!-- Lista de usuarios -->
            
-                 <section id="users-list-section" class="users-list ">
+                 <section id="list-section" class="lista ">
                 <div class="form-container">
                     <h2>Lista de Ejercicios</h2>
                     <button  class="btn-submit" id="add-btn">Agregar Ejercicio</button>
-                    <div id="users-container">
+                    <div id="container-data">
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
                     </div>
                 </div>
