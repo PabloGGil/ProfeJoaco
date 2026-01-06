@@ -1,22 +1,6 @@
+    import {PostData,getData} from './General.js';
     const UrlBase = "/vista/Ajax.php";
-    // localStorage.removeItem('users');
-    // localStorage.removeItem('ejercicios');
-    let users = JSON.parse(localStorage.getItem('users')) || [
-            {
-                id: 1,
-                nombre: 'Ana',
-                apellido: 'García',
-                correo: 'ana.garcia@example.com',
-                fechaNacimiento: '1990-05-15'
-            },
-            {
-                id: 2,
-                nombre: 'Carlos',
-                apellido: 'López',
-                correo: 'carlos.lopez@example.com',
-                fechaNacimiento: '1985-11-22'
-            }
-        ];
+   
         
     // Variables globales
     let currentEditingId = null;
@@ -26,13 +10,15 @@
     const enviarBtn = document.getElementById('submit-btn');
     const cancelarBtn = document.getElementById('cancel-btn');
     const listaContainer = document.getElementById('users-container');
-    const formularioSeccion = document.getElementById('user-form-section');
-    const listaSeccion = document.getElementById('users-list-section');
+    const seccionFormulario = document.getElementById('user-form-section');
+    const seccionLista = document.getElementById('users-list-section');
+    const containerError=document.getElementById('container-error');
     
         
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {           
         setupEventListeners();
+        containerError.classList.add('hidden');
         Listar();
     });
         
@@ -42,6 +28,7 @@
         agregarBtn.addEventListener('click',  (e) => {
            
             MostrarSeccion('form');
+            resetForm();
         });
 
         cancelarBtn.addEventListener('click',  (e) => {
@@ -70,15 +57,14 @@
     }
         
     // Crear nuevo usuario
-    function createUser(userData) {
+    async function createUser(userData) {
         const newUser = {
-            id: Date.now(), // ID único basado en timestamp
-            ...userData
+            ...userData,
+            // q:'CrearUsuario'
         };
-        console.log(newUser);
-        users.push(newUser);
-        console.log(users);
-        saveUsers();
+        url=UrlBase+'Usuario/CrearUsuario';
+        rta=await PostData(url,newUser);
+       
         Listar();
         MostrarSeccion('list');
         
@@ -86,25 +72,29 @@
     }
         
     // Actualizar usuario existente
-    function updateUser(id, userData) {
-        const userIndex = users.findIndex(user => user.id === id);
+    async function updateUser(id, userData) {
+       
+        userData['id']=id;
+        userData['q']='EditarUsuario';
         
-        if (userIndex !== -1) {
-            users[userIndex] = { id, ...userData };
-            saveUsers();
-            Listar();
-            resetForm();
-            MostrarSeccion('list');
-            
-            alert('Usuario actualizado correctamente');
-        }
+        rta=await PostData(userData);
+        Listar();
+        
+        MostrarSeccion('list');
+        
+        alert('Usuario actualizado correctamente');
+       
     }
     
     // Eliminar usuario
-    function deleteUser(id) {
+    async function deleteUser(id) {
         if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-            users = users.filter(user => user.id !== id);
-            saveUsers();
+            const delUsr = {
+                id:id, // ID único basado en timestamp
+            
+                q:'EliminarUsuario'
+            };
+            rta=await PostData(delUsr);
             Listar();
             
             // Si estábamos editando este usuario, resetear el formulario
@@ -116,21 +106,21 @@
         
     // Editar usuario
     function editUser(id) {
-        const user = users.find(user => user.id === id);
-        
-        if (user) {
-            document.getElementById('nombre').value = user.nombre;
-            document.getElementById('apellido').value = user.apellido;
-            document.getElementById('correo').value = user.correo;
-            document.getElementById('fechaNacimiento').value = user.fechaNacimiento;
-            
-            currentEditingId = id;
-            tituloFormulario.textContent = 'Editar Usuario';
-            enviarBtn.textContent = 'Actualizar Usuario';
-            cancelarBtn.style.display = 'block';
-            
-            MostrarSeccion('form');
-        }
+        // const user = users.find(user => user.id === id);
+        const row = document.querySelectorAll('#tr-'+id);
+        const datos = Array.from(row[0].cells)
+        const col=datos.map(td => td.innerText);
+        currentEditingId = id;
+        tituloFormulario.textContent = 'Editar Usuario';
+        enviarBtn.textContent = 'Actualizar Usuario';
+        cancelarBtn.style.display = 'block';
+
+        MostrarSeccion('form');
+       
+            document.getElementById('nombre').value = col[0];
+            document.getElementById('apellido').value = col[1];
+            document.getElementById('correo').value = col[2];
+            document.getElementById('fechaNacimiento').value = col[3];
     }
         
     // Resetear formulario
@@ -139,20 +129,25 @@
         currentEditingId = null;
         tituloFormulario.textContent = 'Agregar Nuevo Usuario';
         enviarBtn.textContent = 'Agregar Usuario';
-        cancelarBtn.style.display = 'none';
+        
     }
         
     // Renderizar lista de usuarios
     async function Listar() {
        
-       console.log(users);
+      
         // console.log(await getData('ListarUsuarios'));
         rta=await getData('ListarUsuarios');
-        users=rta.informacion;
-        if (users.length === 0) {
-            listaContainer.innerHTML = '<div class="no-users">No hay usuarios registrados</div>';
+        
+        if(!rta.success){
+            MostrarMensaje(rta.errorMessage,rta.errorCode);
             return;
         }
+        if (rta.data.length === 0) {
+            listaContainer.innerHTML = '<div class="no-data">No hay Usuarios registrados</div>';
+            return;
+        }
+
         
         let tableHTML = `
             <table class="users-table">
@@ -167,8 +162,8 @@
                 </thead>
                 <tbody>
         `;
-        // <td>${formatDate(user.fechaNacimiento)}
-        users.forEach(user => {
+      
+        rta.data.forEach(user => {
             tableHTML += `
                 <tr>
                     <td>${user.nombre}</td>
@@ -178,8 +173,8 @@
                     <td>${formatDate(user.fechaNacimiento)}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-edit" onclick="editUser(${user.id})">Editar</button>
-                            <button class="btn-delete" onclick="deleteUser(${user.id})">Eliminar</button>
+                            <button id=fila-${user.id} class="btn-edit" onclick="editUser(${user.id})">Editar</button>
+                            <button id=fila-${user.id} class="btn-delete" onclick="deleteUser(${user.id})">Eliminar</button>
                         </div>
                     </td>
                 </tr>
@@ -200,50 +195,79 @@
         return new Date(fechaStr).toLocaleDateString('es-ES', options);
 
     }
-    
-    // Guardar usuarios en localStorage
-    function saveUsers() {
-        localStorage.setItem('users', JSON.stringify(users));
-    }
         
     // Mostrar sección específica
     function MostrarSeccion(section) {
         if (section === 'form') {
             console.log("Mostrando formulario");
-            formularioSeccion.classList.remove('hidden');
-            listaSeccion.classList.add('hidden');
+            seccionFormulario.classList.remove('hidden');
+            seccionLista.classList.add('hidden');
 
         } else if (section === 'list') {
             console.log("Mostrando lista");
-            formularioSeccion.classList.add('hidden');
-            listaSeccion.classList.remove('hidden');
+            seccionFormulario.classList.add('hidden');
+            seccionLista.classList.remove('hidden');
             Listar();
         }
     }
-        
-    async function getData($servicio) {
-    try{
-        url=UrlBase + '?q='+$servicio;
-        opciones= {
-                    method: 'GET', // Specify the HTTP method
-                    headers: {
-                        'Content-Type': 'application/json', // Indicate the content type
-                    },
-        }
-        const response= await fetch(url,opciones)
-        // .then(response => {return response.json()}) 
-        // .then(json => console.log(json));
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        
-        return await response.json();
     
-    } catch (error) {
-        console.error('Error en GET:', error);
-        throw error;
+    async function PostData(postData){
+        try{
+            opciones= {
+                        method: 'POST', 
+                        headers: {
+                            'Content-Type': 'application/json', 
+                        },
+                        body: JSON.stringify(postData), 
+                    }
+            
+            const respuesta= await fetch(UrlBase, opciones)
+
+            if (!respuesta.ok) {
+                MostrarMensaje(respuesta.errorCode,"alert-danger");
+                throw new Error(`Error HTTP: ${respuesta.status}`);
+                console.log(respuesta);
+            }
+            console.log(respuesta);
+            return await respuesta.json();
+        
+            
+        } catch (error) {
+            console.error('Error en POST:', error);
+            throw error;
+        }
+        
     }
+    async function getData($servicio) {
+        try{
+            url=UrlBase + '?q='+$servicio;
+            opciones= {
+                        method: 'GET', 
+                        headers: {
+                            'Content-Type': 'application/json', 
+                        },
+            }
+            const response= await fetch(url,opciones)
+            if (!response.ok) {
+                MostrarMensaje(response.errorCode,"alert-danger");
+                throw new Error(`Error HTTP: ${response.status}`);
+                console.log(response);
+            }
+            console.log(response);
+            return await response.json();
+        
+            } catch (error) {
+                console.log('Error en GET:', error);
     
+            }
+    
+    }
+
+    function MostrarMensaje(texto,tipo = 'success'){
+        containerError.classList.remove('hidden');
+        const div = document.getElementById('mensaje');
+        div.innerHTML = `<div class="alert-danger" >${tipo}</div>`;
+        div.innerHTML  += `<div class="alert" >${texto}</div>`;
     }
     // Hacer las funciones disponibles globalmente para los event listeners en línea
     window.editUser = editUser;

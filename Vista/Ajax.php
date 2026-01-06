@@ -35,8 +35,8 @@ if(isset($_GET['q'])){
     {
         //Usuarios
         case 'ListarUsuarios':
-            $usuario=new Usuario();
-            $info[]=$usuario;
+            $usuario=new UsuarioController();
+            $respuesta=$usuario->Index();
             $mensaje="Lista de usuarios";
             break;
         case 'MostrarUsuario':
@@ -71,11 +71,16 @@ if(isset($_GET['q'])){
 
     switch ($params['q']) {
         case 'CrearUsuario':
-           
+            $usuario=new UsuarioController();
+            $respuesta=$usuario->Crear($params);
             break;
         case 'EditarUsuario':
+            $usuario=new UsuarioController();
+            $respuesta=$usuario->Actualizar($params);
             break;
         case 'EliminarUsuario':
+            $usuario=new UsuarioController();
+            $respuesta=$usuario->Eliminar($params['id']);
             break;
 
         //Ejercicios

@@ -48,7 +48,7 @@
             </section>
         </div>
     </main>
-    <script src="../js/AdminEjercicios.js"></script> 
+    <script type="module" src="../js/AdminEjercicios.js"></script> 
 <?php include "footer.php" ?>    
 
  

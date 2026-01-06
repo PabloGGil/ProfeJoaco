@@ -1,7 +1,12 @@
 <?php  include "header.php" ?>
    
     <main>
-        <div class="container">
+      <div class="container_error hidden" id="container-error">    
+            <div id=mensaje>
+    
+            </div>
+        </div>
+    <div class="container">
             <!-- Formulario para agregar/editar usuario -->
             <section id="user-form-section" class="user-form hidden ">
                 <div class="form-container">

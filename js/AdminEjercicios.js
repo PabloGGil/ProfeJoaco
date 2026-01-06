@@ -1,5 +1,8 @@
-    const UrlBase = "/vista/Ajax.php";
+
+   import {PostData,getData} from './General.js';
    
+
+    // const UrlBase = "http://localhost/vista/Router.php/";
         
     // Variables globales
     let currentEditingId = null;
@@ -53,31 +56,18 @@
             createEjercicio(dataObj);
         }
     }
-    async function updateEjercicio(id, data) {
-        
-        data['id']=id;
-        data['q']='EditarEjercicio';
-        if (id !== -1) {
-            
-            rta=await PostData(data);
-            Listar();
-          
-            MostrarSeccion('list');
-            
-            alert('Usuario actualizado correctamente');
-        }
-    }
+    
     // Crear nuevo 
     async function createEjercicio(dataObj) {
         const newEjercicio = {
  
             ...dataObj,
-            q:'CrearEjercicio'
+            // q:'Ejercicio/CrearEjercicio'
         };
      
- 
-        rta=await PostData(newEjercicio);
-        console.log(objetos);
+        const url ='Ejercicio/CrearEjercicio';
+        let rta=await PostData(url,newEjercicio);
+        // console.log(objetos);
        
         Listar();
         MostrarSeccion('list');
@@ -104,16 +94,32 @@
  
     }
     
+    async function updateEjercicio(id, data) {
+        const url ='Ejercicio/EditarEjercicio';
+        data['id']=id;
+        // data['q']='Ejercicio/EditarEjercicio';
+        if (id !== -1) {
+            
+            let rta=await PostData(url,data);
+           
+          
+            MostrarSeccion('list');
+            Listar();
+            
+            alert('Ejercicio actualizado correctamente');
+        }
+    }
+    
     // Eliminar 
     async function deleteEjercicio(id) {
         if (confirm('¿Estás seguro de que deseas eliminar este ejercicio?')) {
-            
+            const url ='Ejercicio/EliminarEjercicio';
             const delEj = {
                 id:id, // ID único basado en timestamp
             
-                q:'EliminarEjercicio'
+                // q:'Ejercicio/EliminarEjercicio'
             };
-            rta=await PostData(delEj);
+            let rta=await PostData(url,delEj);
             Listar();
             
             // Si estábamos editando , resetear el formulario
@@ -135,7 +141,7 @@
     // Renderizar lista de Ejercicios
     async function Listar() {
         
-        objetos=await getData('ListarEjercicios');
+        const objetos=await getData('Ejercicio/ListarEjercicios');
         console.log(objetos);
         if(!objetos.success){
             MostrarMensaje(objetos.errorMessage,objetos.errorCode);
@@ -186,11 +192,6 @@
         listaContainer.innerHTML = tableHTML;
     }
         
-    // Formatear fecha para mostrar
-    function formatDate(fechaStr) {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' , timeZone:'UTC'};
-        return new Date(fechaStr).toLocaleDateString('es-ES', options);
-    }
     
         
     // Mostrar sección específica
@@ -208,57 +209,58 @@
         }
     }
         
-    async function PostData(postData){
-        try{
-            opciones= {
-                        method: 'POST', 
-                        headers: {
-                            'Content-Type': 'application/json', 
-                        },
-                        body: JSON.stringify(postData), 
-                    }
+    // async function PostData(url,postData){
+    //     try{
+    //         opciones= {
+    //                     method: 'POST', 
+    //                     headers: {
+    //                         'Content-Type': 'application/json', 
+    //                     },
+    //                     body: JSON.stringify(postData), 
+    //                 }
             
-            const respuesta= await fetch(UrlBase, opciones)
+    //         const respuesta= await fetch(url, opciones)
 
-            if (!respuesta.ok) {
-                MostrarMensaje(respuesta.errorCode,"alert-danger");
-                throw new Error(`Error HTTP: ${respuesta.status}`);
-                console.log(respuesta);
-            }
-            console.log(respuesta);
-            return await respuesta.json();
+    //         if (!respuesta.ok) {
+    //             MostrarMensaje(respuesta.errorCode,"alert-danger");
+    //             throw new Error(`Error HTTP: ${respuesta.status}`);
+    //             console.log(respuesta);
+    //         }
+    //         console.log(respuesta);
+    //         return await respuesta.json();
         
             
-        } catch (error) {
-            console.error('Error en POST:', error);
-            throw error;
-        }
+    //     } catch (error) {
+    //         console.error('Error en POST:', error);
+    //         throw error;
+    //     }
         
-    }
-    async function getData($servicio) {
-    try{
-        url=UrlBase + '?q='+$servicio;
-        opciones= {
-                    method: 'GET', 
-                    headers: {
-                        'Content-Type': 'application/json', 
-                    },
-        }
-        const response= await fetch(url,opciones)
-         if (!response.ok) {
-            MostrarMensaje(response.errorCode,"alert-danger");
-            throw new Error(`Error HTTP: ${response.status}`);
-            console.log(response);
-         }
-        console.log(response);
-        return await response.json();
+    // }
+    // async function getData($servicio) {
+    // try{
+    //     // url=UrlBase + '?q='+$servicio;
+    //     url=UrlBase +$servicio;
+    //     opciones= {
+    //                 method: 'GET', 
+    //                 headers: {
+    //                     'Content-Type': 'application/json', 
+    //                 },
+    //     }
+    //     const response= await fetch(url,opciones)
+    //      if (!response.ok) {
+    //         MostrarMensaje(response.errorCode,"alert-danger");
+    //         throw new Error(`Error HTTP: ${response.status}`);
+    //         console.log(response);
+    //      }
+    //     console.log(response);
+    //     return await response.json();
     
-        } catch (error) {
-            console.log('Error en GET:', error);
+    //     } catch (error) {
+    //         console.log('Error en GET:', error);
  
-        }
+    //     }
     
-    }
+    // }
 
     function MostrarMensaje(texto,tipo = 'success'){
         containerError.classList.remove('hidden');

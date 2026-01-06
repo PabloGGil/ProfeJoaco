@@ -37,7 +37,7 @@ class Ejercicios{
 
     }
 
-    public function Crear($data){
+    public function Crear(array $data){
         try     
         {
             $base=new BD();  
@@ -49,7 +49,7 @@ class Ejercicios{
         }
     }
 
-    public function Actualizar($datos){
+    public function Actualizar(array $datos){
     try     
         {
             $base=new BD(); 
@@ -64,7 +64,7 @@ class Ejercicios{
         }
     }
 
-    public function Eliminar($id){
+    public function Eliminar( $id){
         try     
         {
             $base=new BD();  

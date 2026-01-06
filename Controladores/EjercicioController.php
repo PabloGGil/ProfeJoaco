@@ -21,24 +21,24 @@ class EjercicioController{
     }
 
    
-    public function Crear($data){
+    public function Crear(array $data){
         $ejercicio=new Ejercicios();
         unset($data['q']);
         $ret = $ejercicio->Crear($data);
         return $ret;
     }
 
-    public function Actualizar( $data){
+    public function Actualizar( array $data){
         $ejercicio=new Ejercicios();
         unset($data['q']);
         $ret = $ejercicio->Actualizar($data);
         return $ret;
     }
 
-    public function Eliminar($id){
+    public function Eliminar(array $id){
         $ejercicio=new Ejercicios();
        
-        $ret = $ejercicio->Eliminar($id);
+        $ret = $ejercicio->Eliminar($id['id']);
         return $ret;
     }
 
