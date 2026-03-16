@@ -1,3 +1,6 @@
+    
+    <!-- Inicio del  footer-->
+    
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -33,3 +36,4 @@
     </script>
 </body>
 </html>
+   <!-- fin del  footer-->

@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+.ejercicio-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .ejercicio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .ejercicio-card.seleccionado {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .ejercicio-card.seleccionado .card-header {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-grupo {
+            background-color: #6c757d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        .resumen-item {
+            border-left: 3px solid #28a745;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .detalle-input {
+            max-width: 80px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .filtro-activo {
+            background-color: #007bff;
+            color: white;
+        }
+        .contador-seleccion {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }

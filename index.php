@@ -29,6 +29,7 @@
                         <!-- <li><a href="AdminUsuario.php" id="nav-form">Agregar Usuario</a></li> -->
                         <li><a href="vista/AdminUsuario.php" id="nav-list-usuario">Usuarios</a></li>
                         <li><a href="vista/AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
+                        <li><a href="vista/AdminPlanes.php" id="nav-list">Planes</a></li>
                     </ul>
                 </li>
             </ul>

@@ -1,5 +1,5 @@
-const UrlBase = "/vista/Ajax.php";
 
+import { PostData, getData } from './Api.js';
 document.addEventListener("DOMContentLoaded", function() {
     const toggles = document.querySelectorAll(".submenu-toggle");
 
@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // Obtener valores del formulario
             const Nombre = document.getElementById('nombre').value;
             const Apellido = document.getElementById('apellido').value;
-            const FechaNacimiento = document.getElementById('fechaNacimiento').value;
-            const Comentarios = document.getElementById('comments').value;
+            const FechaNacimiento = document.getElementById('fechanac').value;
+            // const Comentarios = document.getElementById('commentarios').value;
             
             // Validación básica
             // if (!firstName || !lastName || !birthDate) {
@@ -27,33 +27,27 @@ document.addEventListener("DOMContentLoaded", function() {
             // }
             registrarUsuario();
             // Mostrar mensaje de éxito
-            alert(`¡Registro exitoso!\n\nNombre: ${nombre} ${apellido}\nFecha de Nacimiento: ${FechaNacimiento}\nComentarios: ${comments || 'Ninguno'}`);
+            // alert(`¡Registro exitoso!\n\nNombre: ${nombre} ${apellido}\nFecha de Nacimiento: ${FechaNacimiento}\nComentarios: ${comments || 'Ninguno'}`);
             
             // Limpiar formulario
             // document.getElementById('userForm').reset();
         });
 
-function registrarUsuario() {
+async function registrarUsuario() {
     const datos = {
         nombre: document.getElementById('nombre').value,
         apellido: document.getElementById('apellido').value,
         correo: document.getElementById('correo').value,
-        fechaNacimiento: document.getElementById('correo').value,
-        comentarios: document.getElementById('comentarios').value,
+        fechanac: document.getElementById('fechanac').value,
+        comentario: document.getElementById('comentarios').value,
     };
     
-    fetch(`${UrlBase}?accion=CrearUsuario`, { 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datos)
-    })
-    .then((response) => response.json())
-    .then(data => {
-        console.log('Usuario registrado:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    const rta=await PostData("Usuario/CrearUsuario",datos);
+    if (!rta.success) {
+        alert(rta.errorMessage);
+        return;
+      }
+      // MostrarSeccion('list');
+      // listar();
+      alert(`¡Registro exitoso!\n\nNombre: ${datos.nombre} ${datos.apellido}\nFecha de Nacimiento: ${datos.fechanac}\nComentarios: ${datos.commentario || 'Ninguno'}`);
 }

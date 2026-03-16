@@ -22,21 +22,22 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="birthDate">Fecha de Nacimiento</label>
-                        <input type="date" id="fechaNacimiento" name="birthDate" >
+                        <label for="fechanac">Fecha de Nacimiento</label>
+                        <input type="date" id="fechanac" name="fechanac" >
                     </div>
                     
                     <div class="form-group">
-                        <label for="comments">Comentarios</label>
-                        <textarea id="comentarios" name="comments" placeholder="Ingrese cualquier comentario adicional..."></textarea>
+                        <label for="comentarios">Comentarios</label>
+                        <textarea id="comentarios" name="comentarios" placeholder="Ingrese cualquier comentario adicional..."></textarea>
                     </div>
                     
                     <!-- <button type="submit" class="btn-submit">Registrar Usuario</button> -->
-                     <button class="btn-submit" onclick="registrarUsuario()">Registrar Usuario</button>
+                     <!-- <button class="btn-submit" id="registro" onclick="Registro()">Registrar Usuario</button> -->
+                     <button class="btn-submit" onclick="Registro()">Registrar Usuario</button>
                 </form>
             </div>
         </div>
     </main>
     <script src="../js/validar.js"></script>
-    <!-- <script src="js/validar.js"> -->
+    <script type="module" src="../js/validar.js"></script>
   <?php  include "footer.php" ?>

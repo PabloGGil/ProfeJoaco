@@ -73,7 +73,7 @@
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             padding: 10px;
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
         
@@ -392,13 +392,21 @@
             gap: 10px;
         }
         
-        .btn-edit, .btn-delete {
+        .btn-detalle, .btn-edit, .btn-delete {
             padding: 8px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
+        }
+        .btn-detalle {
+            background-color: #079211;
+            color: #212529;
+        }
+        
+        .btn-detalle:hover {
+            background-color: #03320d;
         }
         
         .btn-edit {
@@ -532,4 +540,140 @@
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 } 
-      
+
+    /* Personalización del scroll */
+    .overflow-auto::-webkit-scrollbar {
+        width: 8px;
+    }
+    .overflow-auto::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .overflow-auto::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+    .overflow-auto::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+
+    /* Estilos personalizados */
+    .rounded-4 {
+        border-radius: 1rem ;
+    }
+    
+    .border-secondary {
+        border-color: #e5e7eb ;
+    }
+    
+    .bg-light {
+        background-color: #f9fafb ;
+    }
+    
+    .focus-ring-primary:focus {
+        box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+        border-color: transparent;
+    }
+    
+    .shadow-sm {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) ;
+    }
+    
+    .display-6 {
+        font-size: calc(1.375rem + 1.5vw);
+        font-weight: 500;
+        line-height: 1.2;
+    }
+    
+    /* Botón deshabilitado */
+    .disabled\:opacity-50:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    /* Ajustes de padding responsivos */
+    @media (min-width: 768px) {
+        .p-md-5 {
+            /* padding: 3rem !important; */
+                padding: 3rem ;
+        }
+    }
+.form-select{
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 16 16\'%3e%3cpath fill=\'none\' stroke=\'%23343a40\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'m2 5 6 6 6-6\'/%3e%3c/svg%3e");
+    display: block;
+    width: 100%;
+    padding: .375rem 2.25rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    background-image: var(--bs-form-select-bg-img),var(--bs-form-select-bg-icon,none);
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    /* border: var(--bs-border-width) solid var(--bs-border-color); */
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  
+    appearance: none;
+}
+ /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+ .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+            .ejercicio-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .ejercicio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .ejercicio-card.seleccionado {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .ejercicio-card.seleccionado .card-header {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-grupo {
+            background-color: #6c757d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        .resumen-item {
+            border-left: 3px solid #28a745;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .detalle-input {
+            max-width: 80px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .filtro-activo {
+            background-color: #007bff;
+            color: white;
+        }
+        .contador-seleccion {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        } */

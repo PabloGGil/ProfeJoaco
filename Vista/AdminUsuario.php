@@ -8,11 +8,11 @@
         </div>
     <div class="container">
             <!-- Formulario para agregar/editar usuario -->
-            <section id="user-form-section" class="user-form hidden ">
+            <section id="form-section" class="formulario hidden ">
                 <div class="form-container">
                     <h2 id="form-title">Agregar Nuevo Usuario</h2>
                     
-                    <form id="user-form">
+                    <form id="formulario">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
@@ -29,7 +29,11 @@
                         </div>
                         <div class="form-group">
                             <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                             <input type="date" id="fechaNacimiento" name="fechaNacimiento" required >
+                             <input type="date" id="fechanac" name="fechanac" required >
+                        </div>
+                        <div class="form-group">
+                            <label for="comments">Comentarios</label>
+                            <textarea id="comentario" name="comentario" placeholder="Ingrese cualquier comentario adicional..."></textarea>
                         </div>
                         <button type="button" class="btn-submit" id="submit-btn">Enviar</button>
                         <button type="button" class="btn-submit" id="cancel-btn" style="background: #6c757d; margin-top: 10px; ">Cancelar</button>
@@ -37,19 +41,18 @@
                 </div>
             </section>
             
-            <!-- Lista de usuarios -->
+            <!-- Lista  -->
            
-                 <section id="users-list-section" class="users-list ">
+                <section id="list-section" class="lista ">
                 <div class="form-container">
                     <h2>Lista de Usuarios</h2>
                     <button  class="btn-submit" id="add-btn">Agregar Usuario</button>
-                    <div id="users-container">
-                        <!-- Los usuarios se cargarán aquí dinámicamente -->
+                    <div id="container-data">
+                        <!-- Los objetos se cargarán aquí dinámicamente -->
                     </div>
                 </div>
             </section>
         </div>
     </main>
-    <script src="../js/AdminUsuario.js"></script> 
+    <script  type="module" src="../js/Usuarios.js"></script> 
 <?php include "footer.php" ?>    
- 

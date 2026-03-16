@@ -3,6 +3,7 @@ $path_cli=__DIR__.'/../';
 require_once $path_cli.'Sistema/Respuesta.php';
 require_once $path_cli.'controladores/UsuarioController.php';
 require_once $path_cli.'controladores/EjercicioController.php';
+require_once $path_cli.'controladores/PlanesController.php';
 
 // Definimos el mapa de acciones
 $acciones = [
@@ -20,10 +21,17 @@ $acciones = [
         'EditarEjercicio'  => [EjercicioController::class, 'Actualizar'],
         // 'PlanesUsuario'  => [UsuarioController::class, 'getPlanes']
     ],
+     'Plan'=>[
+        'ListarPlanes' => [PlanesController::class, 'Index'],
+        'CrearPlan'   => [PlanesController::class, 'Crear'],
+        'EliminarPlan'=> [PlanesController::class, 'Eliminar'],
+        'EditarPlan'  => [PlanesController::class, 'Actualizar'],
+        // 'PlanesUsuario'  => [UsuarioController::class, 'getPlanes']
+    ],
 ];
 $input = file_get_contents('php://input');
 $params = !empty($input) ? json_decode($input, true, 512, JSON_UNESCAPED_UNICODE) : [];
-$accion = $_GET['q'] ?? null;
+// $accion = $_GET['q'] ?? null;
 // $params = json_decode(file_get_contents('php://input'), true, 512, JSON_UNESCAPED_UNICODE);
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
 $segments = explode('/', trim($uri, '/')); 

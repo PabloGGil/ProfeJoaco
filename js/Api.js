@@ -1,5 +1,8 @@
     
     const UrlBase = "http://localhost/vista/Router.php/";
+
+    
+
     async function PostData(Servicio,postData){
         try{
             const url=UrlBase+Servicio;
@@ -53,4 +56,8 @@
         }
     
     }
+
+ 
+
+    
     export {PostData,getData};

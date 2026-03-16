@@ -16,11 +16,35 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="musculo">Musculo</label>
-                                <input type="text" id="musculo" name="musculo" required>
+                                <input type="text" id="musculo" name="musculo" placeholder="Musculo ó grupo muscular" required>
                             </div>
                             <div class="form-group">
                                 <label for="ejercicio">Ejercicio</label>
-                                <input type="text" id="ejercicio" name="ejercicio" required>
+                                <input type="text" id="ejercicio" name="ejercicio" placeholder="Nombre del ejercicio" required>
+                            </div>
+                        </div>
+                        <div class="form-row g-3 ">
+                            <div class="form-group">
+                                <div class="col-md-6">    
+                                    <label for="categoria">Categoria</label>
+                                    <select class="form-select" id="categoria" name="categoria" >
+                                        <option value="Fuerza">Fuerza</option>
+                                        <option value="Funcional">Funcional</option>
+                                        <option value="Cardio">Cardio</option>
+                                        <option value="Flexibilidad">Flexibilidad</option>
+                                    </select>
+                                </div>
+                                <!-- <input type="text" id="categoria" name="categoria" placeholder="Fuerza, cardio, funcional, etc" required> -->
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">    
+                                    <label for="dificultad">Dificultad</label>
+                                    <select class="form-select" id="dificultad" name="dificultad">
+                                        <option value="Basico">Basico</option>
+                                        <option value="Intermedio">Intermedio</option>
+                                        <option value="Avanzado">Avanzado</option>
+                                    </select>
+                                </div>    
                             </div>
                         </div>
                         <div class="form-group">
@@ -35,7 +59,7 @@
                 </div>
             </section>
             
-            <!-- Lista de usuarios -->
+            <!-- Lista  -->
            
                  <section id="list-section" class="lista ">
                 <div class="form-container">
@@ -48,7 +72,7 @@
             </section>
         </div>
     </main>
-    <script type="module" src="../js/AdminEjercicios.js"></script> 
+    <script type="module" src="../js/Ejercicios.js"></script> 
 <?php include "footer.php" ?>    
 
  

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Plan de Entrenamiento</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Select2 para búsqueda avanzada -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .ejercicio-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .ejercicio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .ejercicio-card.seleccionado {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .ejercicio-card.seleccionado .card-header {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-grupo {
+            background-color: #6c757d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        .resumen-item {
+            border-left: 3px solid #28a745;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .detalle-input {
+            max-width: 80px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .filtro-activo {
+            background-color: #007bff;
+            color: white;
+        }
+        .contador-seleccion {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Encabezado -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-5">
+                    <i class="fas fa-dumbbell text-primary"></i> 
+                    Crear Nuevo Plan de Entrenamiento
+                </h1>
+                <p class="lead">Selecciona los ejercicios que formarán parte de tu plan</p>
+            </div>
+        </div>
+
+        <!-- Formulario principal -->
+        <form id="planForm" onsubmit="return guardarPlan(event)">
+            <!-- Información básica del plan -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle"></i> 
+                                Información del Plan
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombrePlan" class="form-label">Nombre del Plan *</label>
+                                    <input type="text" class="form-control" id="nombrePlan" required 
+                                           placeholder="Ej: Rutina de Fuerza, Full Body, etc.">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="fechaInicio">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="descripcionPlan" class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="descripcionPlan" rows="2" 
+                                              placeholder="Describe el objetivo del plan..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de selección -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list"></i> 
+                                Resumen del Plan
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <span class="contador-seleccion" id="totalEjercicios">0</span>
+                                <span class="text-muted">ejercicios seleccionados</span>
+                            </div>
+                            <div id="resumenEjercicios" class="resumen-container" style="max-height: 300px; overflow-y: auto;">
+                                <p class="text-muted text-center">No hay ejercicios seleccionados</p>
+                            </div>
+                            <hr>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success" id="btnGuardar">
+                                    <i class="fas fa-save"></i> Guardar Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros y búsqueda -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search"></i> 
+                        Filtrar Ejercicios
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Buscar ejercicio</label>
+                            <input type="text" class="form-control" id="buscarEjercicio" 
+                                   placeholder="Nombre del ejercicio...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-select" id="filtroCategoria">
+                                <option value="">Todas</option>
+                                <option value="Fuerza">Fuerza</option>
+                                <option value="Cardio">Cardio</option>
+                                <option value="Flexibilidad">Flexibilidad</option>
+                                <option value="Funcional">Funcional</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Grupo Muscular</label>
+                            <select class="form-select" id="filtroGrupoMuscular">
+                                <option value="">Todos</option>
+                                <option value="Pecho">Pecho</option>
+                                <option value="Espalda">Espalda</option>
+                                <option value="Hombros">Hombros</option>
+                                <option value="Brazos">Brazos</option>
+                                <option value="Piernas">Piernas</option>
+                                <option value="Abdomen">Abdomen</option>
+                                <option value="Full Body">Full Body</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-secondary w-100" onclick="limpiarFiltros()">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de ejercicios -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-dumbbell"></i> 
+                        Ejercicios Disponibles
+                    </h5>
+                    <div>
+                        <button type="button" class="btn btn-light btn-sm" onclick="seleccionarTodos()">
+                            <i class="fas fa-check-double"></i> Seleccionar Todos
+                        </button>
+                        <button type="button" class="btn btn-light btn-sm" onclick="deseleccionarTodos()">
+                            <i class="fas fa-times"></i> Deseleccionar Todos
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="ejerciciosContainer">
+                        <!-- Los ejercicios se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal para confirmar guardado -->
+    <div class="modal fade" id="confirmarModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-check-circle"></i> Plan Creado
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¡El plan se ha creado exitosamente!</p>
+                    <p><strong>Total de ejercicios:</strong> <span id="modalTotalEjercicios"></span></p>
+                    <div id="modalDetalleEjercicios" class="small"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="verPlanes()">Ver todos los planes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="module" src="../js/CrearPlanes.js"></script> 
+    
+</body>
+</html>
