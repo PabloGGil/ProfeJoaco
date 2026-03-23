@@ -1,4 +1,5 @@
     import{PostData,getData } from './Api.js';
+    // import{setupCrud } from './admin.js';
     
     // Datos de ejemplo - En un caso real, estos vendrían de una API o base de datos
         // const ejerciciosData = [
@@ -45,6 +46,7 @@
             document.getElementById('buscarEjercicio').addEventListener('input', window.aplicarFiltros);
             document.getElementById('filtroCategoria').addEventListener('change', window.aplicarFiltros);
             document.getElementById('filtroGrupoMuscular').addEventListener('change', window.aplicarFiltros);
+            document.getElementById('btnGuardar').addEventListener('click', guardarPlan);
         }
 
         function cargarEjercicios() {
@@ -71,7 +73,7 @@
                          onclick="toggleEjercicio(${ejercicio.id}, event)">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">${ejercicio.nombre}</h6>
-                            <span class="badge-grupo">${ejercicio.grupoMuscular}</span>
+                            <span class="badge-grupo">${ejercicio.grupo_muscular}</span>
                         </div>
                         <div class="card-body">
                             <p class="small text-muted mb-2">${ejercicio.descripcion}</p>
@@ -242,9 +244,9 @@ console.log(ejerciciosData.data);
             cargarEjercicios();
         }
 
-        window.guardarPlan=(event)=> {
+        async function guardarPlan(event) {
             event.preventDefault();
-
+        // event.stopPropagation();
             const nombrePlan = document.getElementById('nombrePlan').value;
             if (!nombrePlan) {
                 alert('Por favor, ingresa un nombre para el plan');
@@ -265,7 +267,9 @@ console.log(ejerciciosData.data);
             };
 
             ejerciciosSeleccionados.forEach((detalles, ejercicioId) => {
-                const ejercicio = ejerciciosData.data.find(e => e.id === ejercicioId);
+                // console.log(detalles);
+                // console.log(ejercicioId);
+                const ejercicio = ejerciciosData.data.find(e => e.id == ejercicioId);
                 planData.ejercicios.push({
                     id: ejercicioId,
                     nombre: ejercicio.nombre,
@@ -276,19 +280,26 @@ console.log(ejerciciosData.data);
             // Mostrar modal de confirmación
             document.getElementById('modalTotalEjercicios').textContent = ejerciciosSeleccionados.size;
             
-            let detalleModal = '';
-            planData.ejercicios.forEach(ej => {
-                detalleModal += `<div class="mb-1">• ${ej.nombre}: ${ej.series}x${ej.repeticiones} ${ej.peso ? '| ' + ej.peso + 'kg' : ''}</div>`;
-            });
-            document.getElementById('modalDetalleEjercicios').innerHTML = detalleModal;
+            // let detalleModal = '';
+            // planData.ejercicios.forEach(ej => {
+            //     detalleModal += `<div class="mb-1">• ${ej.nombre}: ${ej.series}x${ej.repeticiones} ${ej.peso ? '| ' + ej.peso + 'kg' : ''}</div>`;
+            // });
+            // document.getElementById('modalDetalleEjercicios').innerHTML = detalleModal;
 
             // Aquí enviarías los datos a tu backend
             console.log('Plan a guardar:', planData);
-
-            const modal = new bootstrap.Modal(document.getElementById('confirmarModal'));
-            modal.show();
-
-            return false;
+debugger;
+let rta = await PostData("Plan/CrearPlan", planData);
+    if (!rta.success) {
+      console.log("error");
+        // MostrarMensaje(rta.errorMessage, rta.errorCode);
+    //   return;
+    }
+            // const modal = new bootstrap.Modal(document.getElementById('confirmarModal'),{keyboard:false});
+            // modal.show();
+            
+            // window.location.href='Plan/ListarPlanes'
+            // return false;
         }
 
         function verPlanes() {

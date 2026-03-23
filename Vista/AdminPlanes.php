@@ -25,7 +25,21 @@
             <section id="list-section" class="lista ">
                 <div class="form-container">
                     <h2>Lista de Planes</h2>
-                    <button  class="btn-submit" id="add-btn">Agregar Plan</button>
+                    <div class="filtro-container">
+                        <input type="text" 
+                            class="form-control" 
+                            id="filtroPlan" 
+                            placeholder="Filtrar por nombre de plan...">
+                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
+                    </div>
+                    <div id="tabla-container">
+                        <div class="loading" id="indicador-carga">
+                            <span>Cargando datos...</span>
+                        </div>
+                    </div>
+                    <!-- <button  class="btn-submit" id="add-btn"> -->
+                        <a href="CrearPlan.php" class="btn-submit" id="add-btn">Agregar Plan</a>
+                     <!-- </button>  -->
                     <div id="container-data">
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
                     </div>

@@ -15,12 +15,12 @@
                     <form id="formulario">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="musculo">Musculo</label>
-                                <input type="text" id="musculo" name="musculo" placeholder="Musculo ó grupo muscular" required>
+                                <label for="grupo_muscular">Musculo</label>
+                                <input type="text" id="grupo_muscular" name="grupo_muscular" placeholder="Musculo ó grupo muscular" required>
                             </div>
                             <div class="form-group">
-                                <label for="ejercicio">Ejercicio</label>
-                                <input type="text" id="ejercicio" name="ejercicio" placeholder="Nombre del ejercicio" required>
+                                <label for="nombre">Ejercicio</label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Nombre del ejercicio" required>
                             </div>
                         </div>
                         <div class="form-row g-3 ">

@@ -3,10 +3,13 @@ $path_cli=__DIR__.'/../';
 include_once($path_cli."BaseDatos/Base.php");
 class Planes{
 
- private $INSERT="INSERT INTO joacosch.planes(id, nombre, descripcion, id_ejercicio)	VALUES (?, ?, ?, ?)";
+ private $INSERT="INSERT INTO joacosch.planes(id, nombre, descripcion, id_ejercicio, series, repeticiones, peso)	VALUES (?, ?, ?, ?, ?, ?, ?)";
     public $nombre;
     public $descripcion;
-    public $id_musculo;
+    public $id_ejercicio;
+    public $series;
+    public $repeticiones;
+    public $peso;
     public $id;
     
     private $campos;
@@ -21,7 +24,7 @@ class Planes{
                 $base=new BD();
                
                 // $resultado=$base->query("select * from joacosch.planes");
-                 $resultado=$base->query("select p.id, p.nombre, p.descripcion, e.musculo, e.ejercicio from joacosch.planes p, joacosch.ejercicios e
+                 $resultado=$base->query("select p.id, p.nombre as pnombre,p.id_ejercicio, p.descripcion,p.repeticiones,p.series, p.peso, e.grupo_muscular as gm, e.nombre from joacosch.planes p, joacosch.ejercicios e
                                           where p.id_ejercicio=e.id");
            
                 return  $resultado;
@@ -34,8 +37,16 @@ class Planes{
 
     }
 
-    public function CrearPlan($datos){
-
+    public function CrearPlan(array $datos){
+        try     
+        {
+            $base=new BD();  
+            $resultado=$base->Insert("joacosch.planes",$datos);
+            return  new Respuesta(true,"","","");
+            return  $resultado;
+        } catch (Exception $e) {
+            return new Respuesta( false , null, "Crear Plan - DB_ERROR", $e->getMessage());
+        }
     }
 
     public function ActualizarPlan($id, $datos){

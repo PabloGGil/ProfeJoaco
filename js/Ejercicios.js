@@ -5,7 +5,7 @@ import{setupCrud } from './admin.js';
 
 setupCrud({
   entity: "Ejercicio",
-  fields: ["grupomuscular", "nombre","categoria","dificultad", "explicacion"],
+  fields: ["grupo_muscular", "nombre","categoria","dificultad", "descripcion"],
   columnas: ["Musculo", "Ejercicio" ,"Categoria", "Dificultad"],
   endpoints: {
     crear: "Ejercicio/CrearEjercicio",
@@ -15,7 +15,7 @@ setupCrud({
   },
   renderRow: (ej) => `
     <tr id="tr-${ej.id}">
-      <td>${ej.grupomuscular}</td>
+      <td>${ej.grupo_muscular}</td>
       <td>${ej.nombre}</td>
       <td>${ej.categoria}</td>
       <td>${ej.dificultad}</td>

@@ -7,9 +7,9 @@
         <!-- Encabezado -->
         <div class="row mb-4">
             <div class="col">
-                <h1 class="display-5">
+                <h2 class="display-5">
                     <i class="fas fa-dumbbell text-primary"></i> 
-                    Crear Nuevo Plan de Entrenamiento
+                    Crear Plan de Entrenamiento
                 </h1>
                 <p class="lead">Selecciona los ejercicios que formarán parte de tu plan</p>
             </div>
@@ -17,6 +17,7 @@
 
         <!-- Formulario principal -->
         <form id="planForm" onsubmit="return guardarPlan(event)">
+            <!-- <form id="planForm" > -->
             <!-- Información básica del plan -->
             <div class="row mb-4">
                 <div class="col-md-8">
@@ -172,6 +173,6 @@
         </div>
     </div>
     <script type="module" src="../js/CrearPlan.js"></script>
- <!-- <script src="../js/CrearPlan.js"></script> -->
+    <!-- <script src="../js/Planes.js"></script> -->
 
    <?php include "footer.php" ?>  

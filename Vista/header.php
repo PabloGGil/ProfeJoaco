@@ -22,7 +22,7 @@
     <!-- Select2 para búsqueda avanzada -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="../css/estilos.css"></link>
+    <link rel="stylesheet" href="../css/estilosOptimizado.css"></link>
 </head>
 <body>
     <header>
