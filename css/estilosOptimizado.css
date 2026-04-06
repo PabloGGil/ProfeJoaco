@@ -566,15 +566,7 @@ footer {
     }
 }
 
-.grupo-item {
-    padding: 5px 10px;
-    margin: 2px 0;
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
-    color: white;
-    border-radius: 15px;
-    display: inline-block;
-    font-size: 0.9rem;
-        }
+
 @media (max-width: 480px) {
     .carousel-container,
     .carousel {

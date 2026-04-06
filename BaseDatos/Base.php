@@ -222,8 +222,8 @@ private function executePrepared(string $sql, array $params) {
         return $result;
     }
 
-	public function Delete(string $table, $id){
-		$sql = "DELETE FROM {$table} WHERE ID={$id}";
+	public function Delete(string $table,  $id){
+		$sql = "DELETE FROM {$table} WHERE id={$id[0]['id']}";
         
         $result = $this->query($sql);
 		return $result;

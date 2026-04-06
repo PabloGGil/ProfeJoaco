@@ -11,7 +11,8 @@ class EjercicioController{
         $ret = $ejercicio->ListarTodos();
         if(!$ret->success){
             $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo guardar el Ejercicio.");        
-        }
+        } 
+        // $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo guardar el Ejercicio.");
         return $ret;
     }
     //Muestra un ejercicio por ID

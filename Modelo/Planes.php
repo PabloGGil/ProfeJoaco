@@ -33,6 +33,15 @@ class Planes{
         }
     }
 
+    public function ExisteNombre($nombre){
+        $existe=true;
+        $base= new BD();
+        $res=$base->query("select count(nombre) from joacosch.planes where nombre='".$nombre."'");
+        if($res->data[0]['count']=="0"){
+            $existe= false;
+        }
+        return $existe;
+    }
     public function BuscarPorId($id){
 
     }
@@ -54,10 +63,24 @@ class Planes{
     }
 
     public function EliminarPlan($id){
-
+        try     
+        {
+            $base=new BD();  
+            $resultado=$base->Delete("joacosch.planes",$id);
+            // return  new Respuesta(true,"","","");
+            return  $resultado;
+        } catch (Exception $e) {
+            return new Respuesta( false , null, "Crear Plan - DB_ERROR", $e->getMessage());
+        }
     }
 
-    public function getUsuarios(){
-        
+    public function getId($nombre){
+        $base=new BD();
+        $resultado=$base->query("select id from joacosch.planes where nombre='{$nombre}'");
+        return $resultado;
     }
 }
+
+// $b=new Planes();
+// print_r( $b->ExisteNombre(' full'));
+// $b->ListarTodos();

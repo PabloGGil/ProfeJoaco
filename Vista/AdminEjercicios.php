@@ -61,11 +61,19 @@
             
             <!-- Lista  -->
            
-                 <section id="list-section" class="lista ">
+            <section id="list-section" class="lista ">
                 <div class="form-container">
                     <h2>Lista de Ejercicios</h2>
+                    <div class="filtro-container">
+                        <input type="text" 
+                            class="form-control" 
+                            id="filtroEjercicio" 
+                            placeholder="Filtrar por nombre de plan...">
+                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
+                    </div>
                     <button  class="btn-submit" id="add-btn">Agregar Ejercicio</button>
                     <div id="container-data">
+
                         <!-- Los usuarios se cargarán aquí dinámicamente -->
                     </div>
                 </div>

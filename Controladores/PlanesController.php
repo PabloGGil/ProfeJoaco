@@ -21,7 +21,8 @@ class PlanesController{
                 'nombre'       => $row['nombre'],
                 'series'       => $row['series'],
                 'repeticiones' => $row['repeticiones'],
-                'peso'         => $row['peso']
+                'peso'         => $row['peso'],
+                'idEjercicio'  => $row['id_ejercicio']
                 ];
             } else{
                 $planes[] = $this->CargarFila($row);
@@ -43,7 +44,8 @@ class PlanesController{
                 'grupoMuscular'=> $row['gm'],
                 'series'=> $row['series'],
                 'repeticiones'=>$row['repeticiones'],
-                'peso'=>$row['peso']
+                'peso'=>$row['peso'],
+                'idEjercicio'  => $row['id_ejercicio']
                 ]
             ]
         ];
@@ -54,17 +56,17 @@ class PlanesController{
     }
 
     public function Crear( $request){
-       $plan=new Planes();
-        // unset($data['q']);
-        $pl= new pl();
-            $pl->nombre=$request["nombre"];
-            $pl->descripcion=$request["descripcion"];
-            // $id_ejercicio=0;
-            // $series=0;
-            // $repeticiones=0;
-            // $peso=0;
+        $plan=new Planes();
+        if($plan->ExisteNombre($request["nombre"])){
+            $resultado=new Respuesta(false,null,"Error Validacion","El nombre del plan ya existe");
+            return $resultado;
+        }
        
-     $listaej=$request["ejercicios"];
+        $pl= new pl();
+        $pl->nombre=$request["nombre"];
+        $pl->descripcion=$request["descripcion"];
+
+        $listaej=$request["ejercicios"];
 
         foreach($listaej as $ej){
             $pl->id_ejercicio=intval($ej["id"]);
@@ -82,8 +84,14 @@ class PlanesController{
 
     }
 
-    public function Eliminar($id){
-
+    public function Eliminar($nombre){
+        $plan=new Planes();
+        $ids=$plan->getId($nombre);
+        foreach($ids->data as $id){
+            $ret=$plan->EliminarPlan([$id]);
+        }
+        // 
+        return $ret;
     }
 
     public function getUsuarios($id_plan){
@@ -92,9 +100,9 @@ class PlanesController{
 }
 
 class pl{
-    public $nombre;
+    // public $pnombre;
     public $descripcion;
-    public $enombre;
+    public $nombre;
     public int $id_ejercicio;
     public int $series;
     public int $repeticiones;

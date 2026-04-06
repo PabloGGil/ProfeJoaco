@@ -23,8 +23,8 @@ setupCrud({
       <td>${ej.series}</td>
       <td>${ej.peso}</td>
       <td>
-        <button class="btn-edit" onclick="editEjercicio(${ej.id})">Editar</button>
-        <button class="btn-delete" onclick="deleteEjercicio(${ej.id})">Eliminar</button>
+        <button class="btn-edit" onclick="editPlanes(${ej.pnombre})">Editar</button>
+        <button class="btn-delete" onclick="deletePlanes(${ej.pnombre})">Eliminar</button>
       </td>
     </tr>
   `

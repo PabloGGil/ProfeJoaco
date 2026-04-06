@@ -1,54 +1,62 @@
     import{PostData,getData } from './Api.js';
-    // import{setupCrud } from './admin.js';
-    
-    // Datos de ejemplo - En un caso real, estos vendrían de una API o base de datos
-        // const ejerciciosData = [
-        //     { id: 1, nombre: "Press de Banca", categoria: "Fuerza", grupoMuscular: "Pecho", descripcion: "Ejercicio básico para pecho", dificultad: "Intermedio" },
-        //     { id: 2, nombre: "Sentadilla", categoria: "Fuerza", grupoMuscular: "Piernas", descripcion: "Ejercicio fundamental para piernas", dificultad: "Básico" },
-        //     { id: 3, nombre: "Dominadas", categoria: "Fuerza", grupoMuscular: "Espalda", descripcion: "Ejercicio para espalda y bíceps", dificultad: "Avanzado" },
-        //     { id: 4, nombre: "Press Militar", categoria: "Fuerza", grupoMuscular: "Hombros", descripcion: "Desarrollo de hombros", dificultad: "Intermedio" },
-        //     { id: 5, nombre: "Curl de Bíceps", categoria: "Fuerza", grupoMuscular: "Brazos", descripcion: "Aislamiento para bíceps", dificultad: "Básico" },
-        //     { id: 6, nombre: "Correr", categoria: "Cardio", grupoMuscular: "Full Body", descripcion: "Ejercicio cardiovascular", dificultad: "Básico" },
-        //     { id: 7, nombre: "Peso Muerto", categoria: "Fuerza", grupoMuscular: "Espalda", descripcion: "Ejercicio compuesto completo", dificultad: "Avanzado" },
-        //     { id: 8, nombre: "Plancha", categoria: "Funcional", grupoMuscular: "Abdomen", descripcion: "Estabilización del core", dificultad: "Intermedio" },
-        //     { id: 9, nombre: "Fondos", categoria: "Fuerza", grupoMuscular: "Brazos", descripcion: "Desarrollo de tríceps", dificultad: "Intermedio" },
-        //     { id: 10, nombre: "Zancadas", categoria: "Funcional", grupoMuscular: "Piernas", descripcion: "Trabajo unilateral de piernas", dificultad: "Básico" }
-        // ];
-        const ejerciciosData=await getData("Ejercicio/ListarEjercicios");
-        // console.log(ejerciciosData.data);
-        console.log(ejerciciosData);
+    // import{MostrarMensaje}from  '/admin.js'
+const containerError = document.getElementById('container-error');
+    const ejerciciosData=await getData("Ejercicio/ListarEjercicios");
+    const enviarBtn = document.getElementById('submit-btn');
+        // console.log(ejerciciosData);
         // Estado de la aplicación
-        let ejerciciosSeleccionados = new Map();
-        let ejerciciosFiltrados = [...ejerciciosData.data];
-        // let ejerciciosFiltrados = [...ejerciciosData];
-        console.log(ejerciciosFiltrados);
-        // Inicialización
-        // document.addEventListener('DOMContentLoaded', function() {
+    let ejerciciosSeleccionados = new Map();
+    let ejerciciosFiltrados = [...ejerciciosData.data];
+    enviarBtn.addEventListener('click', guardarPlan);
+        // console.log(ejerciciosFiltrados);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+        if (window.location.pathname.includes('planes')) {
+            cargarEjercicios();
+        }
+    });
+} else {
+    if (window.location.pathname.includes('planes')) {
+        cargarEjercicios();
+    }
+}
+        // function iniciar() {
+        //     console.log("Iniciando aplicación");
         //     cargarEjercicios();
         //     inicializarEventListeners();
-        // });
-        function iniciar() {
-            console.log("Iniciando aplicación");
-            cargarEjercicios();
-            inicializarEventListeners();
+        // }
+
+        window.editPlanes = function(fila) {
+            // const row = document.querySelector(`#tr-${id}`);
+            const datos = Array.from(fila.cells).map(td => td.innerText);
+            // currentEditingId = id;
+            // if(config.entity=="Planes"){
+            // tituloFormulario.textContent = `Editar ${entity}`;
+            // enviarBtn.textContent = `Actualizar ${entity}`;
+            // cancelarBtn.style.display = 'block';
+            // toggleEjercicio(id);
+       
         }
 
-        if (document.readyState === 'loading') {
-            console.log("DOM aún cargando, esperando evento");
-            document.addEventListener('DOMContentLoaded', iniciar);
-        } else {
-            console.log("DOM ya cargado, ejecutando inmediatamente");
-            iniciar();
-        }
+        // if (document.readyState === 'loading') {
+        //     console.log("DOM aún cargando, esperando evento");
+        //     document.addEventListener('DOMContentLoaded', iniciar);
+        // } else {
+        //     console.log("DOM ya cargado, ejecutando inmediatamente");
+        //     iniciar();
+        // }
 
-        function inicializarEventListeners() {
-            // Filtros
-            document.getElementById('buscarEjercicio').addEventListener('input', window.aplicarFiltros);
-            document.getElementById('filtroCategoria').addEventListener('change', window.aplicarFiltros);
-            document.getElementById('filtroGrupoMuscular').addEventListener('change', window.aplicarFiltros);
-            document.getElementById('btnGuardar').addEventListener('click', guardarPlan);
-        }
+        // function inicializarEventListeners() {
+        //     // Filtros
+        //     document.getElementById('buscarEjercicio').addEventListener('input', window.aplicarFiltros);
+        //     document.getElementById('filtroCategoria').addEventListener('change', window.aplicarFiltros);
+        //     document.getElementById('filtroGrupoMuscular').addEventListener('change', window.aplicarFiltros);
+        //     // 
+   
 
+        // }
+// window.guardarPlan = guardarPlan;
+window.cargarEjercicios = cargarEjercicios;
         function cargarEjercicios() {
             const container = document.getElementById('ejerciciosContainer');
             container.innerHTML = '';
@@ -70,7 +78,7 @@
             return `
                 <div class="col-md-6 col-lg-4 mb-3 ejercicio-card-wrapper" data-id="${ejercicio.id}">
                     <div class="card ejercicio-card ${seleccionado ? 'seleccionado' : ''}" 
-                         onclick="toggleEjercicio(${ejercicio.id}, event)">
+                         onclick="toggleEjercicio(${ejercicio.id})">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">${ejercicio.nombre}</h6>
                             <span class="badge-grupo">${ejercicio.grupo_muscular}</span>
@@ -124,9 +132,11 @@
             `;
         }
 
-        window.toggleEjercicio=function toggleEjercicio(ejercicioId, event) {
+        window.toggleEjercicio=function toggleEjercicio(ejercicioId){//}, event) {
             // Evitar que el clic en inputs afecte la selección
-            if (event.target.tagName === 'INPUT') return;
+           
+            
+            // if (event.target.tagName === 'INPUT') return;
 
             const wrapper = document.querySelector(`.ejercicio-card-wrapper[data-id="${ejercicioId}"]`);
             const card = wrapper.querySelector('.ejercicio-card');
@@ -171,12 +181,12 @@
                 resumenContainer.innerHTML = '<p class="text-muted text-center">No hay ejercicios seleccionados</p>';
                 return;
             }
-console.log("ojotaaa---");
-for (let [key, value] of ejerciciosSeleccionados) {
-    console.log(key, value); // a 1, b 2, c 3
-}
+            console.log("ojotaaa---");
+            for (let [key, value] of ejerciciosSeleccionados) {
+                console.log(key, value); // a 1, b 2, c 3
+            }
             let resumenHTML = '';
-console.log(ejerciciosData.data);           
+            console.log(ejerciciosData.data);           
             ejerciciosSeleccionados.forEach((detalles, ejercicioId) => {
                 console.log("ejercicioID"+ejercicioId);
                 const ejercicio = ejerciciosData.data.find(e => e.id == ejercicioId);
@@ -244,11 +254,12 @@ console.log(ejerciciosData.data);
             cargarEjercicios();
         }
 
-        async function guardarPlan(event) {
+    async function guardarPlan(event) {
             event.preventDefault();
         // event.stopPropagation();
             const nombrePlan = document.getElementById('nombrePlan').value;
             if (!nombrePlan) {
+                
                 alert('Por favor, ingresa un nombre para el plan');
                 return false;
             }
@@ -267,8 +278,6 @@ console.log(ejerciciosData.data);
             };
 
             ejerciciosSeleccionados.forEach((detalles, ejercicioId) => {
-                // console.log(detalles);
-                // console.log(ejercicioId);
                 const ejercicio = ejerciciosData.data.find(e => e.id == ejercicioId);
                 planData.ejercicios.push({
                     id: ejercicioId,
@@ -277,37 +286,46 @@ console.log(ejerciciosData.data);
                 });
             });
 
-            // Mostrar modal de confirmación
-            document.getElementById('modalTotalEjercicios').textContent = ejerciciosSeleccionados.size;
             
-            // let detalleModal = '';
-            // planData.ejercicios.forEach(ej => {
-            //     detalleModal += `<div class="mb-1">• ${ej.nombre}: ${ej.series}x${ej.repeticiones} ${ej.peso ? '| ' + ej.peso + 'kg' : ''}</div>`;
-            // });
-            // document.getElementById('modalDetalleEjercicios').innerHTML = detalleModal;
-
-            // Aquí enviarías los datos a tu backend
             console.log('Plan a guardar:', planData);
-debugger;
-let rta = await PostData("Plan/CrearPlan", planData);
-    if (!rta.success) {
-      console.log("error");
-        // MostrarMensaje(rta.errorMessage, rta.errorCode);
-    //   return;
-    }
-            // const modal = new bootstrap.Modal(document.getElementById('confirmarModal'),{keyboard:false});
-            // modal.show();
             
-            // window.location.href='Plan/ListarPlanes'
-            // return false;
+            let rta = await PostData("Plan/CrearPlan", planData);
+            if (!rta.success) {
+                console.log("error");
+                window.MostrarMensaje(rta.errorMessage, rta.errorCode);
+                // debugger;
+                return rta;
+            }
+            alert("Plan agregado correctamente");
+            console.log(window.location.href);
+            if (window.MostrarSeccion) {
+        window.MostrarSeccion('list');
+    }
+    if (window.ListarPlanes) {
+        window.ListarPlanes();
+    }
+            // return true;
         }
 
-        function verPlanes() {
-            // Redirigir a la lista de planes
-            window.location.href = '/planes';
-            alert('Redirigiendo a la lista de planes...');
-        }
+    // function MostrarMensaje(texto,tipo = 'success'){
+    //     containerError.classList.remove('hidden');
+    //     const div = document.getElementById('mensaje');
+    //     div.innerHTML = `<div class="alert-danger" >${tipo}</div>`;
+    //     div.innerHTML  += `<div class="alert" >${texto}</div>`;
+    // }
 
+        // function verPlanes() {
+        //     // Redirigir a la lista de planes
+        //     window.location.href = '/planes';
+        //     alert('Redirigiendo a la lista de planes...');
+        // }
+
+      
+
+        window.MostrarMensaje("--- LPM ----","error");
         window.crearEjercicioCard=crearEjercicioCard;
         window.toggleEjercicio=toggleEjercicio;
         window.actualizarDetalleEjercicio=actualizarDetalleEjercicio;
+        // export{actualizarResumen,editPlanes,cargarEjercicios,guardarPlan}
+
+        // edicion(22);

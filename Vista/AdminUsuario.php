@@ -10,7 +10,7 @@
             <!-- Formulario para agregar/editar usuario -->
             <section id="form-section" class="formulario hidden ">
                 <div class="form-container">
-                    <h2 id="form-title">Agregar Nuevo Usuario</h2>
+                    <h2 id="form-title">Lista de Usuarios</h2>
                     
                     <form id="formulario">
                         <div class="form-row">
@@ -28,8 +28,8 @@
                             <input type="email" id="correo" name="correo" required>
                         </div>
                         <div class="form-group">
-                            <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                             <input type="date" id="fechanac" name="fechanac" required >
+                            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required >
                         </div>
                         <div class="form-group">
                             <label for="comments">Comentarios</label>
@@ -46,6 +46,12 @@
                 <section id="list-section" class="lista ">
                 <div class="form-container">
                     <h2>Lista de Usuarios</h2>
+                    <div class="filtro-container">
+                        <input type="text" 
+                            class="form-control" 
+                            id="filtroUsuario" 
+                            placeholder="Filtrar por nombre de usuario(correo)...">
+                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
                     <button  class="btn-submit" id="add-btn">Agregar Usuario</button>
                     <div id="container-data">
                         <!-- Los objetos se cargarán aquí dinámicamente -->

@@ -29,7 +29,7 @@ class Usuario{
             
             $timestamp_unix = time();
             $data['fecharegistro'] = date('Y-m-d H:i:s', $timestamp_unix);
-            $fecha_obj = date_create($data['fechanac']);
+            // $fecha_obj = date_create($data['fechaNacimiento']);
             // $data['fechanac'] = $fecha_obj;
             $resultado=$base->Insert("joacosch.usuarios",$data);
             return  new Respuesta(true,"","","");

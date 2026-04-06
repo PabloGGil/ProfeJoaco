@@ -1,10 +1,8 @@
-
-
 import{setupCrud } from './admin.js';
-
+const NombreEntidad = "Ejercicio";
 
 setupCrud({
-  entity: "Ejercicio",
+  entity: NombreEntidad,
   fields: ["grupo_muscular", "nombre","categoria","dificultad", "descripcion"],
   columnas: ["Musculo", "Ejercicio" ,"Categoria", "Dificultad"],
   endpoints: {
@@ -14,7 +12,7 @@ setupCrud({
     listar: "Ejercicio/ListarEjercicios"
   },
   renderRow: (ej) => `
-    <tr id="tr-${ej.id}">
+    <tr data-${NombreEntidad}="${ej.grupo_muscular}" id="tr-${ej.id}">
       <td>${ej.grupo_muscular}</td>
       <td>${ej.nombre}</td>
       <td>${ej.categoria}</td>
