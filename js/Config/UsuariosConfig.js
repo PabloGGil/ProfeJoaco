@@ -1,7 +1,7 @@
-import { setupCrud } from "./admin.js";
+// import { setupCrud } from "../admin.js";
 const NombreEntidad = "Usuario";
 
-setupCrud({
+export const usuarioConfig={
   entity: NombreEntidad,
   fields: ["nombre", "apellido", "correo", "fecha_nacimiento","comentario"],
   columnas:["Nombre", "Apellido", "Correo", "Fecha Nacimiento","Edad","comentario"],
@@ -25,7 +25,7 @@ setupCrud({
       </td>
     </tr>
   `
-});
+};
 
 function calcularEdad(fechaNacimiento) {
     const hoy = new Date();

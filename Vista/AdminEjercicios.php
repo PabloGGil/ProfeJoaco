@@ -67,7 +67,7 @@
                     <div class="filtro-container">
                         <input type="text" 
                             class="form-control" 
-                            id="filtroEjercicio" 
+                            id="filtro" 
                             placeholder="Filtrar por nombre de plan...">
                         <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
                     </div>
@@ -80,7 +80,7 @@
             </section>
         </div>
     </main>
-    <script type="module" src="../js/Ejercicios.js"></script> 
+    <script type="module" src="../js/main.js"></script> 
 <?php include "footer.php" ?>    
 
  

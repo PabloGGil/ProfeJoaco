@@ -88,7 +88,7 @@ class PlanesController{
         $plan=new Planes();
         $ids=$plan->getId($nombre);
         foreach($ids->data as $id){
-            $ret=$plan->EliminarPlan([$id]);
+            $ret=$plan->EliminarPlan($id);
         }
         // 
         return $ret;

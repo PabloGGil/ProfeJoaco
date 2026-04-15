@@ -223,7 +223,12 @@ private function executePrepared(string $sql, array $params) {
     }
 
 	public function Delete(string $table,  $id){
-		$sql = "DELETE FROM {$table} WHERE id={$id[0]['id']}";
+		$where="";	
+		foreach ($id as $campo => $valor) {
+			$where .= "$campo = $valor";
+		}
+
+		$sql = "DELETE FROM {$table} WHERE {$where}";
         
         $result = $this->query($sql);
 		return $result;

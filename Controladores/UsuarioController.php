@@ -38,7 +38,7 @@ class UsuarioController{
     public function Eliminar($id){
        $usuario=new Usuario();
        
-       $ret = $usuario->EliminarUsuario($id['id']);
+       $ret = $usuario->EliminarUsuario(['id'=>$id]);
        return $ret;
     }
 

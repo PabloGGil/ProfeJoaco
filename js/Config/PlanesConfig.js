@@ -1,9 +1,9 @@
 
 
-import{setupCrud } from './admin.js';
+// import{setupCrud } from '../admin.js';
 
 
-setupCrud({
+export const planesConfig={
   entity: "Planes",
   fields: ["pnombre", "descripcion", "nombre", "grupo_muscular","repeticiones", "series", "peso"],
   columnas: ["Plan", "Descripcion", "ejercicio", "Musculo","repeticiones", "series", "peso"],
@@ -11,7 +11,8 @@ setupCrud({
     crear: "Plan/CrearPlan",
     editar: "Plan/EditarPlan",
     eliminar: "Plan/EliminarPlan",
-    listar: "Plan/ListarPlanes"
+    listar: "Plan/ListarPlanes",
+    listarEj: "Ejercicio/ListarEjercicios",
   },
   renderRow: (ej) => `
     <tr id="tr-${ej.id}">
@@ -28,4 +29,4 @@ setupCrud({
       </td>
     </tr>
   `
-});
+};

@@ -36,10 +36,10 @@ class EjercicioController{
         return $ret;
     }
 
-    public function Eliminar(array $id){
+    public function Eliminar( $id){
         $ejercicio=new Ejercicios();
        
-        $ret = $ejercicio->Eliminar($id['id']);
+        $ret = $ejercicio->Eliminar(['id'=>$id]);
         return $ret;
     }
 

@@ -49,7 +49,7 @@
                     <div class="filtro-container">
                         <input type="text" 
                             class="form-control" 
-                            id="filtroUsuario" 
+                            id="filtro" 
                             placeholder="Filtrar por nombre de usuario(correo)...">
                         <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
                     <button  class="btn-submit" id="add-btn">Agregar Usuario</button>
@@ -60,5 +60,5 @@
             </section>
         </div>
     </main>
-    <script  type="module" src="../js/Usuarios.js"></script> 
+    <script  type="module" src="../js/main.js"></script> 
 <?php include "footer.php" ?>    

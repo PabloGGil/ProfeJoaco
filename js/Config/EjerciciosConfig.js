@@ -1,7 +1,7 @@
-import{setupCrud } from './admin.js';
+// import{setupCrud } from '../admin.js';
 const NombreEntidad = "Ejercicio";
 
-setupCrud({
+export const ejerciciosConfig={
   entity: NombreEntidad,
   fields: ["grupo_muscular", "nombre","categoria","dificultad", "descripcion"],
   columnas: ["Musculo", "Ejercicio" ,"Categoria", "Dificultad"],
@@ -25,4 +25,4 @@ setupCrud({
       </td>
     </tr>
   `
-});
+};
