@@ -39,7 +39,8 @@ $segments = explode('/', trim($uri, '/'));
 $modulo = $segments[2] ?? null; 
 // Segundo segmento = acción (listar, crear, etc.) 
 $accion = $segments[3] ?? null; 
-
+$modulo = $_GET['controlador'] ?? null;
+$accion = $_GET['accion'] ?? null;
 
 if ($accion && isset($acciones[$modulo][$accion])) {
     [$class, $method] = $acciones[$modulo][$accion];
