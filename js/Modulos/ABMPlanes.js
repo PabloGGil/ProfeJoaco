@@ -1,16 +1,30 @@
     import{PostData,getData } from '../Api.js';
     import{setupCrud} from  '../admin.js'
     import {planesConfig} from '../Config/PlanesConfig.js';
+    
+    export function initPlanesModule() {
+       
+        const planesHandler= {
+            onInit:null,
+            onList: ListarPlanes,
+            onShowEj: cargarEjercicios,
+            onCreate: guardarPlan,
+            onDelete: editPlanes,
+            onUpdate: guardarPlan,
+        };
+        console.log("Initializing Planes module...");
+        setupCrud(planesConfig, planesHandler);
+    }
     const containerError = document.getElementById('container-error');
-    const ejerciciosData=await getData(planesConfig.endpoints.listarEj);
+    let ejerciciosData;
     const enviarBtn = document.getElementById('submit-btn');
     const indicadorCarga = document.getElementById('indicador-carga');
     const listaContainer = document.getElementById('container-data');
+    const ejerciciosSeleccionados = new Map();
     let isInitialized = false; 
  
-    let ejerciciosSeleccionados = new Map();
-    let ejerciciosFiltrados = [...ejerciciosData.data];
-    enviarBtn.addEventListener('click', guardarPlan);
+    
+    // enviarBtn.addEventListener('click', guardarPlan);
  
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
@@ -31,7 +45,7 @@
         return;
       }
       const planes=rta.data;
-      console.log(planes);
+    //   console.log(planes);
       if (planes.length === 0) {
           listaContainer.innerHTML = '<div class="no-resultados">No se encontraron planes</div>';
           return;
@@ -144,12 +158,15 @@
     
     }
 
-    function cargarEjercicios() {
+    async function cargarEjercicios() {
         const container = document.getElementById('ejerciciosContainer');
+         ejerciciosData=await getData(planesConfig.endpoints.listarEj);
+        
+        let ejerciciosFiltrados = [...ejerciciosData.data];
         container.innerHTML = '';
 
         ejerciciosFiltrados.forEach(ejercicio => {
-            console.log(ejercicio);
+            // console.log(ejercicio);
             const seleccionado = ejerciciosSeleccionados.has(ejercicio.id);
             const ejercicioHTML = crearEjercicioCard(ejercicio, seleccionado);
             container.innerHTML += ejercicioHTML;
@@ -268,16 +285,16 @@
             resumenContainer.innerHTML = '<p class="text-muted text-center">No hay ejercicios seleccionados</p>';
             return;
         }
-        console.log("ojotaaa---");
-        for (let [key, value] of ejerciciosSeleccionados) {
-            console.log(key, value); // a 1, b 2, c 3
-        }
+        // console.log("ojotaaa---");
+        // for (let [key, value] of ejerciciosSeleccionados) {
+        //     console.log(key, value); // a 1, b 2, c 3
+        // }
         let resumenHTML = '';
-        console.log(ejerciciosData.data);           
+        // console.log(ejerciciosData.data);           
         ejerciciosSeleccionados.forEach((detalles, ejercicioId) => {
             console.log("ejercicioID"+ejercicioId);
             const ejercicio = ejerciciosData.data.find(e => e.id == ejercicioId);
-            console.log(ejercicio.id);
+            // console.log(ejercicio.id);
             if (ejercicio) {
                 resumenHTML += `
                     <div class="resumen-item">
@@ -315,7 +332,7 @@
     }
 
     async function guardarPlan(event) {
-            // event.preventDefault();
+        event.preventDefault;
         // event.stopPropagation();
             const nombrePlan = document.getElementById('nombrePlan').value;
             if (!nombrePlan) {
@@ -345,39 +362,24 @@
                     ...detalles
                 });
             });
-
             
             console.log('Plan a guardar:', planData);
             
-            let rta = await PostData(planesConfig.endpoints.crear, planData);
+            const rta = await PostData(planesConfig.endpoints.crear, planData);
             if (!rta.success) {
-                console.log("error");
+                // console.log("error");
                 MostrarMensaje(rta.errorMessage, rta.errorCode);
                 // debugger;
-                return rta;
+                // return rta;
             }
+            console.log(rta);
             alert("Plan agregado correctamente");
-            console.log(window.location.href);
+            // console.log(window.location.href);
             // if (MostrarSeccion) {
-            MostrarSeccion('list');
-    // }
-    // if (window.ListarPlanes) {
-        ListarPlanes();
-    // }
-            // return true;
+            //MostrarSeccion('list');
+    
+            ListarPlanes();
         }
 
-    export function initPlanesModule() {
-       
-        const planesHandler= {
-            onInit:null,
-            onList: ListarPlanes,
-            onShowEj: cargarEjercicios,
-            onCreate: guardarPlan,
-            onDelete: editPlanes,
-            onUpdate: guardarPlan,
-        };
-        console.log("Initializing Planes module...");
-        setupCrud(planesConfig, planesHandler);
-    }
+    
  // edicion(22);

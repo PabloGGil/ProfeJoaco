@@ -160,7 +160,7 @@
                             class="form-control" 
                             id="filtro" 
                             placeholder="Filtrar por nombre de plan...">
-                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
+                        <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
                     </div>
                     <div id="tabla-container">
                         <div class="loading" id="indicador-carga">

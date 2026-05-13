@@ -20,7 +20,7 @@ class Logger {
         if (!$this->enabled) return;
         
         $timestamp = date('Y-m-d H:i:s');
-        $log_message = "[$timestamp] [$level] $message";
+        $log_message = "{$timestamp} ;{$level}; {$message}";
         
         if (!empty($context)) {
             $log_message .= " " . json_encode($context);

@@ -69,7 +69,7 @@
                             class="form-control" 
                             id="filtro" 
                             placeholder="Filtrar por nombre de plan...">
-                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
+                        <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
                     </div>
                     <button  class="btn-submit" id="add-btn">Agregar Ejercicio</button>
                     <div id="container-data">

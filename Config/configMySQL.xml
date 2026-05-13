@@ -10,14 +10,16 @@
         <multilang>NO</multilang>
 		<logfile>Logs/applog.log</logfile>
 	</entorno>
+	<!-- Configuracion Base MySQL -->
     <database>
-		<tipobd>mysql</tipobd>
-		<name>if0_41721842_profejoaco</name>
+		<tipoBD>mysql<tipoBD>
+		<name>if0_41721842_profeJoaco</name>
 		<schema>joacosch</schema>
         <host>localhost</host>
         <port>3306</port>
         <user>if0_41721842</user>
         <dbpass>964d8f487846ca6db356d37acb469f4ab237bf68</dbpass>
-        <charset>UTF8</charset>
+        <charset>utf8mb4_general_ci</charset>
     </database>
+
 </globales>

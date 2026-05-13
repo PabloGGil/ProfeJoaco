@@ -51,7 +51,7 @@
                             class="form-control" 
                             id="filtro" 
                             placeholder="Filtrar por nombre de usuario(correo)...">
-                        <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar</button>
+                        <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
                     <button  class="btn-submit" id="add-btn">Agregar Usuario</button>
                     <div id="container-data">
                         <!-- Los objetos se cargarán aquí dinámicamente -->

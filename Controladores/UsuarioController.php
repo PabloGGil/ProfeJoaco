@@ -1,7 +1,7 @@
 <?php
 $path_cli=__DIR__.'/../';
 include_once($path_cli."Sistema/Respuesta.php");
-include_once($path_cli."modelo/Usuarios.php");
+include_once($path_cli."Modelo/Usuarios.php");
 
 class UsuarioController{
 
@@ -23,7 +23,10 @@ class UsuarioController{
     // public function Crear($request){
     public function Crear($data){
         $usuario=new Usuario();
-        unset($data['q']);
+        // unset($data['q']);
+        
+        $timestamp_unix = time();
+        $data['fecharegistro'] = date('Y-m-d H:i:s', $timestamp_unix);
         $ret = $usuario->Crear($data);
         return $ret;
     }

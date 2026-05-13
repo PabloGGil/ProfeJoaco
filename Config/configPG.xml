@@ -11,13 +11,12 @@
 		<logfile>Logs/applog.log</logfile>
 	</entorno>
     <database>
-		<tipobd>mysql</tipobd>
-		<name>if0_41721842_profejoaco</name>
+		<name>profejoaco</name>
 		<schema>joacosch</schema>
-        <host>localhost</host>
-        <port>3306</port>
-        <user>if0_41721842</user>
-        <dbpass>964d8f487846ca6db356d37acb469f4ab237bf68</dbpass>
+        <host>172.28.182.102</host>
+        <port>5433</port>
+        <user>joaco</user>
+        <dbpass>b04db9489846cb6dbe56947a97467d4a7a37</dbpass>
         <charset>UTF8</charset>
     </database>
 </globales>

@@ -17,8 +17,7 @@ class BD {
 	private $db_pass;
 	private $db_charset;
 	private $dato;
-	private $tipoBD;
-	private $esquema;
+
 	private $ROOT_PATH;
 	
 	private $sqlError;
@@ -32,8 +31,7 @@ class BD {
 		$this->Log=new Logger();
 		BD::setRootPath();
 		$conf= CargaConfiguracion::getInstance('');
-		// $this->tipoBD=$conf->leeParametro("tipobd");
-		// $this->esquema=$conf->leeParametro("schema");
+	
 		$this->db_host=$conf->leeParametro("host");
 		$this->db_port=$conf->leeParametro("port");
 		$this->db_name=$conf->leeParametro("name");
@@ -54,7 +52,7 @@ class BD {
 		$this->conn=$oconn->getConector();
 		
 		// Configurar charset
-		// mysqli_set_charset($this->conn, $this->db_charset);
+		mysqli_set_charset($this->conn, $this->db_charset);
 		
 		if ($dato!=0){
 			BD::seteaDato($dato);
@@ -144,7 +142,7 @@ class BD {
 		// Determinar tipos de parámetros
 		$types = '';
 		$bindParams = [];
-		// $bindParams[] = &$types;
+		$bindParams[] = &$types;
 		
 		foreach ($params as $param) {
 			if ($param === null) {
@@ -166,9 +164,8 @@ class BD {
 		}
 		
 		// Bind parameters usando call_user_func_array
-		if (count($bindParams) >= 1) {
-			// call_user_func_array([$stmt, 'bind_param'], $bindParams);
-			$stmt->bind_param($types, ...$bindParams);
+		if (count($bindParams) > 1) {
+			call_user_func_array([$stmt, 'bind_param'], $bindParams);
 		}
 		
 		$stmt->execute();
@@ -211,7 +208,7 @@ class BD {
 					$this->cantReg = $stmt->affected_rows;
 				}
 				
-				// $stmt->close();
+				$stmt->close();
 			} else {
 				// Consulta sin parámetros
 				$result = mysqli_query($this->conn, $sql);
@@ -397,9 +394,9 @@ class BD {
 	/**
 	 * Destructor - cierra la conexión
 	 */
-	// public function __destruct() {
-	// 	$this->close();
-	// }
+	public function __destruct() {
+		$this->close();
+	}
 }
 	
 /**

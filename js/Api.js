@@ -1,11 +1,18 @@
     
-    const UrlBase = "http://localhost/vista/Router.php/";
-
+    // const UrlBase = "http://localhost/vista/Router.php/";
+    import { APP_ENV }        from './Config/ConfigEntorno.js';
+    const UrlBase = APP_ENV.API_BASE_URL;
+    console.log("URL Base: "+APP_ENV.API_BASE_URL);
     
 
-    async function PostData(Servicio,postData){
+    export async function PostData(servicio,postData){
         try{
-            const url=UrlBase+Servicio;
+            const controlador=servicio.split("/")[0];
+            const accion=servicio.split("/")[1];
+            const parametros=`?controlador=${controlador}&accion=${accion}`;
+            // url=UrlBase + '?q='+$servicio;
+            const url=UrlBase +parametros;
+            
             const opciones= {
                         method: 'POST', 
                         headers: {
@@ -26,15 +33,21 @@
         
             
         } catch (error) {
-            console.error('Error en POST:', error);
+            console.log('Error en POST:', error);
             throw error;
         }
         
     }
-    async function getData(servicio) {
+
+    export async function getData(servicio) {
     try{
+        // // url=UrlBase + '?q='+$servicio;
+        // const url=UrlBase +servicio;
+        const controlador=servicio.split("/")[0];
+        const accion=servicio.split("/")[1];
+        const parametros=`?controlador=${controlador}&accion=${accion}`;
         // url=UrlBase + '?q='+$servicio;
-        const url=UrlBase +servicio;
+        const url=UrlBase +parametros;
         const opciones= {
                     method: 'GET', 
                     headers: {
@@ -60,4 +73,4 @@
  
 
     
-    export {PostData,getData};
+    // export {PostData,getData};

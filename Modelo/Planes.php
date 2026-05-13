@@ -1,9 +1,12 @@
 <?php
 $path_cli=__DIR__.'/../';
 include_once($path_cli."BaseDatos/Base.php");
+include_once($path_cli."Sistema/CargaConfiguracion.php");
+include_once($path_cli."Sistema/logger.php");
+
 class Planes{
 
- private $INSERT="INSERT INTO joacosch.planes(id, nombre, descripcion, id_ejercicio, series, repeticiones, peso)	VALUES (?, ?, ?, ?, ?, ?, ?)";
+//  private $INSERT="INSERT INTO joacosch.planes(id, nombre, descripcion, id_ejercicio, series, repeticiones, peso)	VALUES (?, ?, ?, ?, ?, ?, ?)";
     public $nombre;
     public $descripcion;
     public $id_ejercicio;
@@ -11,24 +14,38 @@ class Planes{
     public $repeticiones;
     public $peso;
     public $id;
+    private $tipoBD;
+    private $esquema;
+    private $tabla="planes";
+    private $tabEj="ejercicios";
+    private $log;
     
     private $campos;
 
     
  public function __construct(){
+        $this->log=new Logger();
         $this->campos = ['nombre', 'descripcion','id_musculo'];
-      
+        $conf= CargaConfiguracion::getInstance('');
+		$this->tipoBD=$conf->leeParametro("tipobd");
+		$this->esquema=$conf->leeParametro("schema");
+        if($this->tipoBD=="postgres"){
+            $this->tabla=$this->esquema .".".$this->tabla;
+            $this->tabEj=$this->esquema .".".$this->tabEj;
+        }
     }
     public function ListarTodos(){
         try {
                 $base=new BD();
-               
+               $sql="select p.id, p.nombre as pnombre,p.id_ejercicio, p.descripcion,p.repeticiones,p.series, p.peso, e.grupo_muscular as gm, e.nombre from {$this->tabla} p, {$this->tabEj} e
+                                          where p.id_ejercicio=e.id";
                 // $resultado=$base->query("select * from joacosch.planes");
-                 $resultado=$base->query("select p.id, p.nombre as pnombre,p.id_ejercicio, p.descripcion,p.repeticiones,p.series, p.peso, e.grupo_muscular as gm, e.nombre from joacosch.planes p, joacosch.ejercicios e
-                                          where p.id_ejercicio=e.id");
+                 $resultado=$base->query($sql);
+                 $this->log->log("data planes ","INFO",$resultado);
            
                 return  $resultado;
         } catch (Exception $e) {
+            $this->log->log("data planes ","MODELO_ERROR",$e->getMessage());
             return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
         }
     }
@@ -36,7 +53,7 @@ class Planes{
     public function ExisteNombre($nombre){
         $existe=true;
         $base= new BD();
-        $res=$base->query("select count(nombre) from joacosch.planes where nombre='".$nombre."'");
+        $res=$base->query("select count(nombre) from {$this->tabla} where nombre='".$nombre."'");
         if($res->data[0]['count']=="0"){
             $existe= false;
         }
@@ -50,7 +67,7 @@ class Planes{
         try     
         {
             $base=new BD();  
-            $resultado=$base->Insert("joacosch.planes",$datos);
+            $resultado=$base->Insert($this->tabla,$datos);
             return  new Respuesta(true,"","","");
             return  $resultado;
         } catch (Exception $e) {
@@ -66,7 +83,7 @@ class Planes{
         try     
         {
             $base=new BD();  
-            $resultado=$base->Delete("joacosch.planes",$id);
+            $resultado=$base->Delete($this->tabla,$id);
             // return  new Respuesta(true,"","","");
             return  $resultado;
         } catch (Exception $e) {
@@ -76,7 +93,7 @@ class Planes{
 
     public function getId($nombre){
         $base=new BD();
-        $resultado=$base->query("select id from joacosch.planes where nombre='{$nombre}'");
+        $resultado=$base->query("select id from {$this->tabla} where nombre='{$nombre}'");
         return $resultado;
     }
 }

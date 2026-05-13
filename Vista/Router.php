@@ -1,9 +1,11 @@
 <?php
 $path_cli=__DIR__.'/../';
+include_once($path_cli."Sistema/logger.php");
 require_once $path_cli.'Sistema/Respuesta.php';
-require_once $path_cli.'controladores/UsuarioController.php';
-require_once $path_cli.'controladores/EjercicioController.php';
-require_once $path_cli.'controladores/PlanesController.php';
+require_once $path_cli.'Controladores/UsuarioController.php';
+require_once $path_cli.'Controladores/EjercicioController.php';
+require_once $path_cli.'Controladores/PlanesController.php';
+require_once $path_cli.'Controladores/TestBD.php';
 
 // Definimos el mapa de acciones
 $acciones = [
@@ -28,25 +30,39 @@ $acciones = [
         'EditarPlan'  => [PlanesController::class, 'Actualizar'],
         // 'PlanesUsuario'  => [UsuarioController::class, 'getPlanes']
     ],
+     'Test'=>[
+        'testdirecto' => [test::class, 'testdirecto'],
+        'testClasebd' => [test::class, 'testClasebd'],
+       // 'PlanesUsuario'  => [UsuarioController::class, 'getPlanes']
+    ],
 ];
+$Log=new Logger();
+
 $input = file_get_contents('php://input');
+$Log->log("Iniciando router--- ","INFO",$input);
 $params = !empty($input) ? json_decode($input, true, 512, JSON_UNESCAPED_UNICODE) : [];
 // $accion = $_GET['q'] ?? null;
-// $params = json_decode(file_get_contents('php://input'), true, 512, JSON_UNESCAPED_UNICODE);
+
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
-$segments = explode('/', trim($uri, '/')); 
-// Primer segmento = módulo (usuarios, ventas, etc.) 
-$modulo = $segments[2] ?? null; 
-// Segundo segmento = acción (listar, crear, etc.) 
-$accion = $segments[3] ?? null; 
+
 $modulo = $_GET['controlador'] ?? null;
 $accion = $_GET['accion'] ?? null;
-
+if (!$modulo || !$accion) {
+    http_response_code(400);
+    echo json_encode([
+        "error" => "Faltan parámetros de ruteo",
+        "recibido" => $_GET // Esto te ayudará a ver qué está llegando
+        
+    ]);
+    $Log->error("Faltan parámetros de ruteo");
+    exit;
+}
 if ($accion && isset($acciones[$modulo][$accion])) {
     [$class, $method] = $acciones[$modulo][$accion];
 
     try {
         $controller = new $class();
+        $Log->log("router--- direccionando a:","INFO",$class."---". $method);
         $respuesta = call_user_func([$controller, $method], $params);
 
         // Siempre devolvemos JSON
@@ -54,11 +70,13 @@ if ($accion && isset($acciones[$modulo][$accion])) {
 
     } catch (Exception $e) {
         $respuesta = new Respuesta(false, null, "SERVER_ERROR", "Error interno del servidor");
-        error_log("Error en acción $accion: " . $e->getMessage());
+        $Log->error("Error en acción $accion: " . $e->getMessage());
+
         echo json_encode($respuesta);
     }
 
 } else {
     $respuesta = new Respuesta(false, null, "NOT_FOUND", "Acción no encontrada");
+    $Log->error("Acción no encontrada");
     echo json_encode($respuesta);
 }

@@ -1,7 +1,9 @@
-import { initAdmin } from './admin.js';
-import {usuarioConfig} from './Config/UsuariosConfig.js';
+
+import { initAdmin }      from './admin.js';
+import {usuarioConfig}    from './Config/UsuariosConfig.js';
 import {ejerciciosConfig} from './Config/EjerciciosConfig.js';
 import {initPlanesModule} from './Modulos/ABMPlanes.js';
+import { APP_ENV }        from './Config/ConfigEntorno.js';
 
 // document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;

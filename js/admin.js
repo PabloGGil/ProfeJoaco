@@ -1,5 +1,5 @@
 import { PostData, getData } from './Api.js';
-
+ let inicializado = false;  // ← Agregar al principio del archivo
 export function initAdmin(config) {
 
       console.log(`Inicializando modulo ${config.entity}...`);
@@ -29,7 +29,8 @@ export function setupCrud(config,customHandlers={}) {
   const seccionLista = document.getElementById('list-section');
   const filtro=document.getElementById('filtro');
   const indicadorCarga = document.getElementById('indicador-carga');
- 
+  const btnLimpiar = document.getElementById('btnLimpiar');
+
   // Creacion de los manejadores en base al archivo de configuracion
   const handlers = {
     onCreate: customHandlers.onCreate || create,
@@ -51,16 +52,33 @@ console.log(handlers);
   }
 
   
-  function iniciar() {
+  // function iniciar() {
+  //   console.log("Iniciando aplicación");
+  //   if (handlers.onInit) {
+  //     handlers.onInit();
+  //   }
+  //   setupEventListeners();
+  //   containerError.classList.add('hidden');
+  //   handlers.onList();
+   
+  // }
+ 
+
+function iniciar() {
+    if (inicializado) {
+        console.warn("initAdmin ya fue ejecutado, ignorando...");
+        return;
+    }
+    inicializado = true;
+    
     console.log("Iniciando aplicación");
     if (handlers.onInit) {
-      handlers.onInit();
+        handlers.onInit();
     }
     setupEventListeners();
     containerError.classList.add('hidden');
     handlers.onList();
-   
-  }
+}
   
   // Listeners --> boton enviar, boton agregar, boton cancelar y filtro
   function setupEventListeners() {
@@ -76,11 +94,11 @@ console.log(handlers);
     });
     cancelarBtn.addEventListener('click', () => {
       MostrarSeccion('list');
-      handlers.onList;
+      handlers.onList();
     });
     
     filtro.addEventListener('keyup',filtrarTabla);
-    
+    btnLimpiar.addEventListener('click',limpiarFiltro);
   }
 
   function handleFormSubmit(e) {
@@ -106,7 +124,7 @@ console.log(handlers);
       return;
     }
     MostrarSeccion('list');
-    listar();
+    await listar();
     alert(`${entity} agregado correctamente`);
   }
 
@@ -168,7 +186,7 @@ console.log(handlers);
   }
 
 /* -------------------------------------------
-  Funcion REMOVE -------------------------------
+  Funcion LISTAR -------------------------------
   -------------------------------------------*/
   async function listar() {
     const rta = await getData(endpoints.listar);
@@ -233,7 +251,7 @@ console.log(handlers);
   }
   
   function filtrarTabla() {
-    const filtro = document.getElementById(`filtro${entity}`).value.toLowerCase();
+    const filtro = document.getElementById('filtro').value.toLowerCase();
     const tabla = document.getElementById(`tabla-${entity}`);
     console.log(`ehhhh  tabla-${entity}`);
     if (!tabla) return;
@@ -282,7 +300,7 @@ console.log(handlers);
         
   // Función para limpiar filtro
   function limpiarFiltro() {
-      document.getElementById('filtroUsuario').value = '';
+      document.getElementById('filtro').value = '';
       filtrarTabla();
   }
   

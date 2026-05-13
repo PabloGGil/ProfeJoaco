@@ -1,7 +1,7 @@
 <?php
 $path_cli=__DIR__.'/../';
 include_once($path_cli."Sistema/Respuesta.php");
-include_once($path_cli."modelo/planes.php");
+include_once($path_cli."Modelo/Planes.php");
 
 class PlanesController{
 
@@ -9,7 +9,7 @@ class PlanesController{
         $planes=new Planes();
         $ret = $planes->ListarTodos();
         if(!$ret->success){
-            $ret=new Respuesta(false, null, "DB_ERROR", "No se pudo acceder a los planes");        
+            return new Respuesta(false, null, "DB_ERROR", "No se pudo acceder a los planes");        
         }
         $planes = [];
         foreach ($ret->data as $row) {
@@ -57,26 +57,26 @@ class PlanesController{
 
     public function Crear( $request){
         $plan=new Planes();
-        if($plan->ExisteNombre($request["nombre"])){
-            $resultado=new Respuesta(false,null,"Error Validacion","El nombre del plan ya existe");
-            return $resultado;
-        }
+        // if($plan->ExisteNombre($request["nombre"])){
+        //     $resultado=new Respuesta(false,null,"Error Validacion","El nombre del plan ya existe");
+        //     return $resultado;
+        // }
        
         $pl= new pl();
         $pl->nombre=$request["nombre"];
         $pl->descripcion=$request["descripcion"];
 
         $listaej=$request["ejercicios"];
-
+$i=0;
         foreach($listaej as $ej){
             $pl->id_ejercicio=intval($ej["id"]);
             $pl->series=intval($ej["series"]);
             $pl->repeticiones=intval($ej["repeticiones"]);
             $pl->peso=intval($ej["peso"]);
             $ret = $plan->CrearPlan((array)$pl);
-            // $ret = $plan->CrearPlan($data);
+            $i++;
         }
-        
+echo $i;
         return $ret;
     }
 

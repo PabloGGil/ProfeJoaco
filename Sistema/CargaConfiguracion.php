@@ -259,9 +259,9 @@ class Encriptador
 
 
 // $crip=new Encriptador();
-// $llave=$conf->leeParametro("key");
-// echo "llave:  ".$llave;//"RrtzCzcCmXBZSCZz";	
-// $cod=$crip->encripta($llave,"joaco2002");
+// // $llave=$conf->leeParametro("key");
+
+// $cod=$crip->encripta("FMhZn8","PEAbdqdRjy");
 // echo "pass encriptada:  " .$cod;
 
 
