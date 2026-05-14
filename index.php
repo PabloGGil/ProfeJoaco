@@ -1,77 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    -->
-    <title>Profe Joaco</title>
-    <link rel="stylesheet" href="css/estilos.css"></link>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Profe Joaquin</h1>
-            <p>Entrenamiento personalizado</p>
-        </div>
-    </header>
-    
-    <nav>
-        <div class="container">
-            <ul class="menu">
-                <li><a href="../index.php" >Inicio</a></li>
-                <li><a href="vista/actividades.php">Actividades</a></li>
-                <li><a href="vista/planesEntrenamiento.php">Planes de  Entrenamiento</a></li>
-                <li><a href="vista/registro.php">Registrate</a></li>
-                <li><a href="vista/login.php">Ingresar</a></li>
-                <li class="has-submenu">
-                    <a href="#" class="submenu-toggle">Administración</a>
-                    <ul class="submenu">
-                        <!-- <li><a href="AdminUsuario.php" id="nav-form">Agregar Usuario</a></li> -->
-                        <li><a href="vista/AdminUsuario.php" id="nav-list-usuario">Usuarios</a></li>
-                        <li><a href="vista/AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
-                        <li><a href="vista/AdminPlanes.php" id="nav-list">Planes</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<?php include "./Vista/header.php" ?> 
     
     <main>
         <div class="container">
             <div class="form-container">
                 <h2>Pagina principal</h2>
- <div class="carousel-container">
-            <div class="carousel">
+                <div class="carousel-container">
+                <div class="carousel">
                 <div class="carousel-item">
-                    <img src="Imagenes/5.jpg" alt="Paisaje montañoso">
+                    <img src="./Imagenes/5.jpg" alt="Paisaje montañoso">
                     <div class="carousel-caption">
                         <h3>Montañas Serenas</h3>
                         <p>Un paisaje tranquilo en la cordillera</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Imagenes/4.jpg" alt="Bosque nevado">
+                    <img src="./Imagenes/4.jpg" alt="Bosque nevado">
                     <div class="carousel-caption">
                         <h3>Bosque Invernal</h3>
                         <p>Árboles cubiertos de nieve en un día frío</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Imagenes/3.jpg" alt="Atardecer en la playa">
+                    <img src="./Imagenes/3.jpg" alt="Atardecer en la montaña">
                     <div class="carousel-caption">
                         <h3>Atardecer Dorado</h3>
                         <p>La puesta de sol tiñe el mar de colores cálidos</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Imagenes/1.jpg" alt="Paisaje natural">
+                    <img src="./Imagenes/1.jpg" alt="Paisaje natural">
                     <div class="carousel-caption">
                         <h3>Horizonte Infinito</h3>
                         <p>Un vasto paisaje bajo un cielo despejado</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Imagenes/2.jpg" alt="Bosque verde">
+                    <img src="./Imagenes/2.jpg" alt="Bosque verde">
                     <div class="carousel-caption">
                         <h3>Bosque Encantado</h3>
                         <p>Senderos entre árboles centenarios</p>

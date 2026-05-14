@@ -37,18 +37,18 @@
         <div class="container">
             <ul class="menu">
                 <li><a href="../index.php" >Inicio</a></li>
-                <li><a href="actividades.php">Actividades</a></li>
-                <li><a href="planesEntrenamiento.php">Planes de  Entrenamiento</a></li>
-                <li><a href="registro.php">Registrate</a></li>
-                <li><a href="login.php">Ingresar</a></li>
+                <li><a href="../Vista/actividades.php">Actividades</a></li>
+                <li><a href="../Vista/planesEntrenamiento.php">Planes de  Entrenamiento</a></li>
+                <li><a href="../Vista/registro.php">Registrate</a></li>
+                <li><a href="../Vista/login.php">Ingresar</a></li>
                 <li class="has-submenu ">
                 
                     <a href="#" id="usuarios-menu">Administracion</a>
                     <!-- Submenú (puede estar oculto inicialmente con CSS) -->
                     <ul class=" submenu">
-                        <li><a href="AdminUsuario.php" id="nav-list">Usuarios</a></li>
-                        <li><a href="AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
-                        <li><a href="AdminPlanes.php" id="nav-list">Planes</a></li>
+                        <li><a href="../Vista/AdminUsuario.php" id="nav-list">Usuarios</a></li>
+                        <li><a href="../Vista/AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
+                        <li><a href="../Vista/AdminPlanes.php" id="nav-list">Planes</a></li>
                     </ul>
                 </li>
         
