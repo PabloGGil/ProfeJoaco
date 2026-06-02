@@ -3,6 +3,7 @@ $path_cli=__DIR__.'/../';
 include_once($path_cli."Sistema/Respuesta.php");
 include_once($path_cli."Modelo/Planes.php");
 
+
 class PlanesController{
 
     public function Index(){
@@ -57,26 +58,25 @@ class PlanesController{
 
     public function Crear( $request){
         $plan=new Planes();
-        // if($plan->ExisteNombre($request["nombre"])){
-        //     $resultado=new Respuesta(false,null,"Error Validacion","El nombre del plan ya existe");
-        //     return $resultado;
-        // }
        
         $pl= new pl();
         $pl->nombre=$request["nombre"];
         $pl->descripcion=$request["descripcion"];
 
         $listaej=$request["ejercicios"];
-$i=0;
+        $i=0;
         foreach($listaej as $ej){
             $pl->id_ejercicio=intval($ej["id"]);
             $pl->series=intval($ej["series"]);
             $pl->repeticiones=intval($ej["repeticiones"]);
             $pl->peso=intval($ej["peso"]);
+            $timestamp_unix = time();
+            $pl->fecha_creacion = date('Y-m-d H:i:s', $timestamp_unix);
+            $pl->creador=$_SESSION['usuario'];
             $ret = $plan->CrearPlan((array)$pl);
             $i++;
         }
-echo $i;
+        
         return $ret;
     }
 
@@ -107,5 +107,7 @@ class pl{
     public int $series;
     public int $repeticiones;
     public int $peso;
-};
+    public $fecha_creacion;
+    public $creador;
+}
 

@@ -1,53 +1,60 @@
 
 import { PostData, getData } from './Api.js';
-document.addEventListener("DOMContentLoaded", function() {
-    const toggles = document.querySelectorAll(".submenu-toggle");
+import { usuarioConfig } from './Config/UsuariosConfig.js';
 
-    toggles.forEach(toggle => {
-        toggle.addEventListener("click", function(e) {
-            e.preventDefault(); // evita que se siga el link
-            const parentLi = this.parentElement;
-            parentLi.classList.toggle("open"); // alterna la clase "open"
-        });
+    const btnRegistro=document.getElementById('btn-registro');    
+    console.log(CryptoJS.AES.encrypt("canni", 'pp234').toString());
+
+    btnRegistro.addEventListener('click', async function(e) {
+        const Usuario = document.getElementById('correo').value;
+        const Nombre = document.getElementById('nombre').value;
+        const Apellido = document.getElementById('apellido').value;
+        const FechaNacimiento = document.getElementById('fechanac').value== null ? '' : document.getElementById('fechanac').value;
+        const Comentario = document.getElementById('comentarios').value== null ? '' : document.getElementById('comentarios').value;
+        const passwd=document.getElementById('passwd').value;
+        const rePasswd=document.getElementById('re-passwd').value;
+        
+        e.preventDefault();
+        
+        // Validación básica
+        if (!Usuario || !Nombre || !Apellido || !passwd) {
+            alert('Por favor, complete todos los campos obligatorios.');
+            return;
+        }
+        if (passwd !== rePasswd) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+        // la verificacion que el usuario no existe se hace en el backend
+        
+        registrarUsuario();
+       
+       
+           
+        async function registrarUsuario() {
+            
+            const secretKey = 'pp234';
+            const passwordEnc = CryptoJS.AES.encrypt(passwd, secretKey).toString();
+           
+            const datos = {
+                nombre: Nombre,
+                apellido: Apellido,
+                correo: Usuario,
+                fechanac: FechaNacimiento,
+                comentario: Comentario,
+                passwd:passwordEnc
+            };
+            
+            const rta=await PostData(usuarioConfig.endpoints.crear,datos);
+            if (!rta.success) {
+                alert(rta.errorMessage);
+                return;
+            }
+            // MostrarSeccion('list');
+            // listar();
+            alert(`¡Registro exitoso!\n\nNombre: ${datos.nombre} ${datos.apellido}\nFecha de Nacimiento: ${datos.fechanac}\nComentarios: ${datos.commentario || 'Ninguno'}`);
+            window.location.href = '../index.php';
+        }
     });
-});
-    document.getElementById('userForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Obtener valores del formulario
-            const Nombre = document.getElementById('nombre').value;
-            const Apellido = document.getElementById('apellido').value;
-            const FechaNacimiento = document.getElementById('fechanac').value;
-            // const Comentarios = document.getElementById('commentarios').value;
-            
-            // Validación básica
-            // if (!firstName || !lastName || !birthDate) {
-            //     alert('Por favor, complete todos los campos obligatorios.');
-            //     return;
-            // }
-            registrarUsuario();
-            // Mostrar mensaje de éxito
-            // alert(`¡Registro exitoso!\n\nNombre: ${nombre} ${apellido}\nFecha de Nacimiento: ${FechaNacimiento}\nComentarios: ${comments || 'Ninguno'}`);
-            
-            // Limpiar formulario
-            // document.getElementById('userForm').reset();
-        });
 
-async function registrarUsuario() {
-    const datos = {
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
-        correo: document.getElementById('correo').value,
-        fechanac: document.getElementById('fechanac').value,
-        comentario: document.getElementById('comentarios').value,
-    };
-    
-    const rta=await PostData("Usuario/CrearUsuario",datos);
-    if (!rta.success) {
-        alert(rta.errorMessage);
-        return;
-      }
-      // MostrarSeccion('list');
-      // listar();
-      alert(`¡Registro exitoso!\n\nNombre: ${datos.nombre} ${datos.apellido}\nFecha de Nacimiento: ${datos.fechanac}\nComentarios: ${datos.commentario || 'Ninguno'}`);
-}
+

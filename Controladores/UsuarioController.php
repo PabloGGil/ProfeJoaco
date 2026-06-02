@@ -2,7 +2,7 @@
 $path_cli=__DIR__.'/../';
 include_once($path_cli."Sistema/Respuesta.php");
 include_once($path_cli."Modelo/Usuarios.php");
-
+session_start();
 class UsuarioController{
 
     //Listar Todos los usuarios
@@ -14,19 +14,54 @@ class UsuarioController{
         }
         return $ret;
     }
-    //Muestra un usuario por ID
-    public function Mostrar($id){
- 
 
+    public function Login($dataLogin){
+        $usr=new Usuario();
+ 
+        $ret=$usr->Login(['passwd'=>$dataLogin['password'],'usuario'=>$dataLogin['usuario']]);
+        $_SESSION['rol']=isset($ret->data[0]['rol'])?$ret->data[0]['rol']:'anonimo';
+        if($ret->data[0]['acceso'] ){
+            
+            $_SESSION['logueado']=true;
+            $_SESSION['usuario']=$dataLogin['usuario'];
+            $_SESSION['login_time'] = time();
+        
+        // Forzar escritura de sesión
+            session_write_close();
+            return ['loginOK'=>true, 'rol'=>$_SESSION['rol']];
+        }else{
+            $_SESSION['logueado']=false;
+            return ['loginOK'=>false, 'rol'=>$_SESSION['rol']];
+        }
+        // return ['loginOK'=>false, 'rol'=>$ret->data['rol']];
     }
 
-    // public function Crear($request){
+    // Verificar que el usuario no exista
+    public function ExisteUsuario($correo){
+        $usr=new Usuario(); 
+        // $data=[];
+        $existe=$usr->getUsuarioCond(["correo"=>$correo]);
+
+        if(count($existe->data)>0){
+            // $data[]=false;
+            return true;
+        }
+        else{
+            // $data[]=true;
+            return false;
+        }
+    }
+ 
     public function Crear($data){
         $usuario=new Usuario();
-        // unset($data['q']);
-        
+        // Verificar que el usuario no exista
+        $existe=$this->ExisteUsuario($data['correo']);
+        if($existe){
+            return new Respuesta(false,null,"", "El usuario ya esta registrado");
+        }
         $timestamp_unix = time();
         $data['fecharegistro'] = date('Y-m-d H:i:s', $timestamp_unix);
+        $data['rol']='usuario';
         $ret = $usuario->Crear($data);
         return $ret;
     }

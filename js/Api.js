@@ -41,13 +41,18 @@
 
     export async function getData(servicio) {
     try{
-        // // url=UrlBase + '?q='+$servicio;
-        // const url=UrlBase +servicio;
         const controlador=servicio.split("/")[0];
         const accion=servicio.split("/")[1];
-        const parametros=`?controlador=${controlador}&accion=${accion}`;
+        let par="";
+        if(servicio.split("/").lenght >2){
+            const par=servicio.split("/")[2];
+            par="&$"+par;
+        }
+        
+        const parametros=`?controlador=${controlador}&accion=${accion}${par}`;
         // url=UrlBase + '?q='+$servicio;
         const url=UrlBase +parametros;
+        console.log(url);
         const opciones= {
                     method: 'GET', 
                     headers: {

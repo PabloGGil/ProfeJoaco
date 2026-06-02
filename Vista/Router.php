@@ -14,7 +14,9 @@ $acciones = [
         'CrearUsuario'   => [UsuarioController::class, 'Crear'],
         'EliminarUsuario'=> [UsuarioController::class, 'Eliminar'],
         'EditarUsuario'  => [UsuarioController::class, 'Actualizar'],
-        'PlanesUsuario'  => [UsuarioController::class, 'getPlanes']
+        'PlanesUsuario'  => [UsuarioController::class, 'getPlanes'],
+        'Login'          => [UsuarioController::class, 'Login'],
+        'getUsuario'     => [UsuarioController::class, 'getID']
     ],
     'Ejercicio'=>[
         'ListarEjercicios' => [EjercicioController::class, 'Index'],
@@ -37,16 +39,21 @@ $acciones = [
     ],
 ];
 $Log=new Logger();
+$method = $_SERVER['REQUEST_METHOD'];
+
 
 $input = file_get_contents('php://input');
 $Log->log("Iniciando router--- ","INFO",$input);
 $params = !empty($input) ? json_decode($input, true, 512, JSON_UNESCAPED_UNICODE) : [];
-// $accion = $_GET['q'] ?? null;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
 
 $modulo = $_GET['controlador'] ?? null;
 $accion = $_GET['accion'] ?? null;
+$id=$_GET['id']?? null;
+if ($method == 'GET') {
+    $params=$id;
+}
 if (!$modulo || !$accion) {
     http_response_code(400);
     echo json_encode([
@@ -63,7 +70,7 @@ if ($accion && isset($acciones[$modulo][$accion])) {
     try {
         $controller = new $class();
         $Log->log("router--- direccionando a:","INFO",$class."---". $method);
-        $respuesta = call_user_func([$controller, $method], $params);
+        $respuesta = call_user_func([$controller, $method ], $params);
 
         // Siempre devolvemos JSON
         echo json_encode($respuesta);

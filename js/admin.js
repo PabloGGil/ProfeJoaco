@@ -113,10 +113,26 @@ function iniciar() {
         handlers.onUpdate(currentEditingId,dataObj);
       }
     } else {
+        if(entity=="Usuario"){
+          dataObj.passwd=EncriptarPasswd(dataObj.passwd);
+        }
         handlers.onCreate(dataObj)
     }   
   }
 
+  function EncriptarPasswd(passwd){
+    const secretKey = 'pp234';
+    const passwordEnc = CryptoJS.AES.encrypt(passwd, secretKey).toString();
+    return passwordEnc;
+    // const datos = {
+    //     nombre: Nombre,
+    //     apellido: Apellido,
+    //     correo: Usuario,
+    //     fechanac: FechaNacimiento,
+    //     comentario: Comentario,
+    //     passwd:passwordEnc
+    // };
+  }
   async function create(dataObj) {
     let rta = await PostData(endpoints.crear, dataObj);
     if (!rta.success) {

@@ -7,6 +7,7 @@ class Usuario{
     private $tipoBD;
     private $esquema;
     private $tabla="usuarios";
+    private $select;
 
     public function __construct(){
         $conf= CargaConfiguracion::getInstance('');
@@ -15,55 +16,69 @@ class Usuario{
         if($this->tipoBD=="postgres"){
             $this->tabla=$this->esquema .".".$this->tabla;
         }
+        $this->select="SELECT * FROM {$this->tabla} ";
     }
     public function ListarTodos(){
     try {
             $base=new BD();
-            $resultado=$base->query("select * from {$this->tabla}");   
+            $resultado=$base->query($this->select);   
             return  $resultado;
         } catch (Exception $e) {
             return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
         }
     }
 
-    public function BuscarPorId($id){
+    public function getUsuarioCond($condicion){
+        $where="";
+        try{
+            $base=new BD();
+            foreach($condicion as $llave=>$valor){
+                $where= "WHERE {$llave}='{$valor}'";
+               
+            }
+            
+            $resultado=$base->query($this->select .$where );
+            return  $resultado;
+        } catch (Exception $e) {
+            return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
+        }
+    }
+    public function getUsuarioxID($id){
 
     }
-    public function ExisteUsuario($correo){
-        $base=new BD(); 
-        $correo=trim($correo);
-        $resultado=$base->query("select count(*) as cuenta from {$this->tabla} where correo='{$correo}' ");
-        $existe=$resultado->data[0]['cuenta'];
-        if($existe)
-            return true;
-        else
-            return false;
+
+    public function Login($data){
+        $bd=new BD();
+        $querySQL="select * from {$this->tabla} where correo='{$data['usuario']}'";
+        //  and passwd='{$data['passwd']}'";
+        $rta=$bd->query($querySQL);
+        
+        if(count($rta->data)==0){
+            // usuario o contraseña incorrectos
+            $rta->data[0]['acceso']=false;
+            return  new Respuesta(true,$rta->data,$rta->errorCode,"Usuario o contraseña incorrecto");
+        }
+        $rta->data[0]['acceso']=true;
+        return  new Respuesta(true,$rta->data,"","");;
     }
+    
     public function Crear($data){
         try     
         {
             $base=new BD();  
-            // Verificar que el usuario no exista
-            if(!$this->ExisteUsuario($data['correo'])){
-                $resultado=$base->Insert($this->tabla,$data);
-                if($resultado){
-                    return  new Respuesta(true,"",$resultado->errorCode,$resultado->errorCode);
-                }
-            }else{
-                return  new Respuesta(false,"","","El usuario ya existe");
+            
+            $resultado=$base->Insert($this->tabla,$data);
+            if(!$resultado->success){
+                return  new Respuesta(false,"",$resultado->errorCode,$resultado->errorCode);
             }
-            // $fecha_obj = date_create($data['fechaNacimiento']);
-            // $data['fechanac'] = $fecha_obj;
-            
-            
-            // return  $resultado;
+            return  $resultado;
         } catch (Exception $e) {
             return new Respuesta(false, null, "DB_ERROR", $e->getMessage());
         }
     }
 
     public function ActualizarUsuario(array $data){
-try     
+        try     
         {
             $base=new BD(); 
             $condicion['id']= $data['id'];

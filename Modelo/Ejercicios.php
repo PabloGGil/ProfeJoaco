@@ -34,10 +34,7 @@ class Ejercicios{
     public function ListarTodos(){
         try {
                 $base=new BD();
-               
                 $resultado=$base->query("select * from {$this->tabla}");
-                
-           
                 return  $resultado;
         } catch (Exception $e) {
             $this->log->log("Listar Todos- ejercicio","ERROR",$e->getMessage());
@@ -45,6 +42,7 @@ class Ejercicios{
         }
     }
 
+  
     public function BuscarPorId($id){
 
     }

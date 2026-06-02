@@ -29,7 +29,21 @@
                         </div>
                         <div class="form-group">
                             <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required >
+                             <input type="date" id="fechanac" name="fechanac" required >
+                        </div>
+                        <div class="form-group">
+                            <label for="rol">rol de usuario</label>
+                             <input type="text" id="rol" name="rol" required >
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="passwd">Contraseña</label>
+                                <input type="password" id="passwd" name="passwd" placeholder="Ingrese contraseña" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="passwd">Confirmacion contraseña</label>
+                                <input type="password" id="re-passwd" name="passwd" placeholder="Ingrese contraseña" required>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="comments">Comentarios</label>

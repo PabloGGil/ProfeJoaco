@@ -18,6 +18,8 @@
                             @joacogabriel02
                         </a>
                     </div>
+                    <div class="box">
+		
                 </div>
                 <div class="footer-copyright">
                     <p>&copy; 2025 Profe Joaquin. Todos los derechos reservados.</p>
@@ -30,10 +32,11 @@
     <!-- <script src="../js/Carrusel.js"></script> -->
     <!-- <script src="../js/validar.js"></script> -->
     
-    <script>
-        // Datos de ejemplo (simulando una base de datos)
+    <!--<script type="module" src="../js/main.js"> </script> -->
+        
+        
     
-    </script>
+   
 </body>
 </html>
    <!-- fin del  footer-->

@@ -16,7 +16,7 @@
         setupCrud(planesConfig, planesHandler);
     }
     const containerError = document.getElementById('container-error');
-    let ejerciciosData;
+    let ejerciciosData=[];
     const enviarBtn = document.getElementById('submit-btn');
     const indicadorCarga = document.getElementById('indicador-carga');
     const listaContainer = document.getElementById('container-data');
@@ -28,10 +28,10 @@
  
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            // cargarEjercicios();
+            cargarEjercicios();
         });
     } else {
-            // cargarEjercicios();
+            cargarEjercicios();
     }
     
 
@@ -160,8 +160,8 @@
 
     async function cargarEjercicios() {
         const container = document.getElementById('ejerciciosContainer');
-         ejerciciosData=await getData(planesConfig.endpoints.listarEj);
-        
+        ejerciciosData=await getData(planesConfig.endpoints.listarEj);
+        console.log(ejerciciosData.data);
         let ejerciciosFiltrados = [...ejerciciosData.data];
         container.innerHTML = '';
 
@@ -237,11 +237,6 @@
     }
 
     window.toggleEjercicio=function toggleEjercicio(ejercicioId){//}, event) {
-        // Evitar que el clic en inputs afecte la selección
-        
-        
-        // if (event.target.tagName === 'INPUT') return;
-
         const wrapper = document.querySelector(`.ejercicio-card-wrapper[data-id="${ejercicioId}"]`);
         const card = wrapper.querySelector('.ejercicio-card');
         const detalles = card.querySelector('.detalles-ejercicio');
@@ -262,8 +257,8 @@
             card.classList.add('seleccionado');
             detalles.classList.remove('d-none');
         }
-        
-        actualizarResumen();
+            
+            actualizarResumen();
     }
 
     window.actualizarDetalleEjercicio=(ejercicioId, campo, valor)=> {
