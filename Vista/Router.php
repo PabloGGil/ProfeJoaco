@@ -16,7 +16,8 @@ $acciones = [
         'EditarUsuario'  => [UsuarioController::class, 'Actualizar'],
         'PlanesUsuario'  => [UsuarioController::class, 'getPlanes'],
         'Login'          => [UsuarioController::class, 'Login'],
-        'getUsuario'     => [UsuarioController::class, 'getID']
+        'getUsuario'     => [UsuarioController::class, 'getID'],
+        'cambioPwd'     => [UsuarioController::class, 'cambioPwd']
     ],
     'Ejercicio'=>[
         'ListarEjercicios' => [EjercicioController::class, 'Index'],

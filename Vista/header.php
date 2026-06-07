@@ -16,13 +16,7 @@ $userName = $_SESSION['usuario'] ?? 'Invitado';
 // Determinar qué mostrar en el menú
 $showAdminMenu = ($estaLogueado && $userRole === 'admin');
 ?>
-<script>
-    
-    // Pasar variable de PHP a JavaScript
-    // window.isAdmin =json_decode
-   
-    console.log("admin: "+window.isAdmin);
-</script>
+
    <!-- Inicio del  header-->
 <!DOCTYPE html>
 <html lang="es">
@@ -32,36 +26,58 @@ $showAdminMenu = ($estaLogueado && $userRole === 'admin');
     <title>Profe Joaco</title>
      
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Font Awesome para íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
     <!-- Select2 para búsqueda avanzada -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 
-    <link rel="stylesheet" href="../css/estilosOptimizado.css"></link>
+    <link rel="stylesheet" href="../css/estilosOptimizados.css">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 </head>
 <body>
     <header class="main-header">
         <div class="header-container">
+             <div class="header-left"></div>
             <div class="logo-area">
                 <h1>Profe Joaquin</h1>
                 <p>Entrenamiento personalizado</p>
-            </div>
-        
-    <div class="user-menu-container">
-                <div class="user-menu">
-                    <div class="user-avatar">
-                        <i class="fas fa-user-circle"></i>
-                        <?php if($estaLogueado): ?>
-                            <span class="user-name"><?php echo htmlspecialchars($userName); ?></span>
-                        <?php else: ?>
-                            <span class="user-name">Mi Cuenta</span>
-                        <?php endif; ?>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
+           </div>
+        <div class="user-menu-container">
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <?php if($estaLogueado): ?>
+                        <!-- Avatar cuando está logueado -->
+                        <div class="avatar-circle">
+                            <?php if(isset($_SESSION['avatar']) && !empty($_SESSION['avatar'])): ?>
+                                <img src="<?php echo htmlspecialchars($_SESSION['avatar']); ?>" alt="Avatar">
+                            <?php else: ?>
+                                <!-- Mostrar iniciales del usuario -->
+                                <?php 
+                                    $iniciales = '';
+                                    $nombreCompleto = $userName;
+                                    $palabras = explode(' ', $nombreCompleto);
+                                    if(count($palabras) >= 2) {
+                                        $iniciales = strtoupper(substr($palabras[0], 0, 1) . substr($palabras[1], 0, 1));
+                                    } else {
+                                        $iniciales = strtoupper(substr($nombreCompleto, 0, 2));
+                                    }
+                                ?>
+                                <span><?php echo $iniciales; ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <span id="user-name" class="user-name"><?php echo htmlspecialchars($userName); ?></span>
+                    <?php else: ?>
+                        <!-- Avatar por defecto (no logueado) -->
+                        <div class="avatar-circle default">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="user-name">Mi Cuenta</span>
+                    <?php endif; ?>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
                     
                     <div class="dropdown-menu-custom">
                         <?php if($estaLogueado): ?>
@@ -76,32 +92,50 @@ $showAdminMenu = ($estaLogueado && $userRole === 'admin');
                             <a href="../Vista/mis-entrenamientos.php" class="dropdown-item">
                                 <i class="fas fa-calendar-check"></i> Mis Entrenamientos
                             </a>
-                            <?php if($userRole=='admin'): ?>
-                                <!-- <a href="../Vista/admin/dashboard.php" class="dropdown-item">
-                                    <i class="fas fa-tachometer-alt"></i> Dashboard Admin
-                                </a> -->
-                            <?php endif; ?>
-                            <div class="dropdown-divider"></div>
-                            <a href="../Vista/Logout.php" class="dropdown-item">
-                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            
+                            <!-- Opción para cambiar avatar (opcional) -->
+                            <a href="../Vista/cambiar-avatar.php" class="dropdown-item">
+                                <i class="fas fa-camera"></i> Cambiar Avatar
                             </a>
-                        <?php else: ?>
-                            <a href="../Vista/login.php" class="dropdown-item">
-                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+
+                            <!-- Opción para cambiar password  -->
+                            <a href="../Vista/cambiar-passwd.php" class="dropdown-item">
+                                <i class="fas fa-key"></i> Cambiar Contraseña
                             </a>
-                            <a href="../Vista/registro.php" class="dropdown-item">
-                                <i class="fas fa-user-plus"></i> Registrarse
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="../Vista/recuperar-password.php" class="dropdown-item">
-                                <i class="fas fa-key"></i> ¿Olvidaste tu contraseña?
-                            </a>
+                            
+                            <?php if($userRole == 'admin'): ?>
+                                <div class="dropdown-divider"></div>
+                                <a href="../Vista/AdminUsuario.php" class="dropdown-item">
+                                    <i class="fas fa-users-cog"></i> Admin Usuarios
+                                </a>
+                                <a href="../Vista/AdminEjercicios.php" class="dropdown-item">
+                                    <i class="fas fa-dumbbell"></i> Admin Ejercicios
+                                </a>
+                                <a href="../Vista/AdminPlanes.php" class="dropdown-item">
+                                    <i class="fas fa-calendar-alt"></i> Admin Planes
+                                </a>
                         <?php endif; ?>
-                    </div>
-                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        <a href="../Vista/Logout.php" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    <?php else: ?>
+                        <a href="../Vista/login.php" class="dropdown-item">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </a>
+                        <a href="../Vista/registro.php" class="dropdown-item">
+                            <i class="fas fa-user-plus"></i> Registrarse
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="../Vista/recuperar-password.php" class="dropdown-item">
+                            <i class="fas fa-key"></i> ¿Olvidaste tu contraseña?
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-    </header>
     
     <nav>
         <div class="container">
@@ -112,20 +146,7 @@ $showAdminMenu = ($estaLogueado && $userRole === 'admin');
                 <li><a href="../Vista/registro.php">Registrate</a></li>
                 <li><a href="../Vista/login.php">Ingresar</a></li>
                 <li class="has-submenu ">
-                <?php if($showAdminMenu): ?>
-                    <a href="#" id="admin-menu">Administracion</a>
-                    <!-- Submenú (puede estar oculto inicialmente con CSS) -->
-                    <ul class=" submenu" >
-                    <div id="menu-admin">
-                        
-                            <li><a href="../Vista/AdminUsuario.php" id="nav-list">Usuarios</a></li>
-                            <li><a href="../Vista/AdminEjercicios.php" id="nav-list">Ejercicios</a></li>
-                            <li><a href="../Vista/AdminPlanes.php" id="nav-list">Planes</a></li>
-                        <?php endif ; ?>
-                    </div>
-                    </ul>
-                    
-                </li>
+                
                     
         
             </ul>

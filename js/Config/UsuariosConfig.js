@@ -11,6 +11,7 @@ export const usuarioConfig={
     eliminar: "Usuario/EliminarUsuario",
     listar: "Usuario/ListarUsuarios",
     login: "Usuario/Login",
+    cambioPWD: "Usuario/cambioPwd",
     getID: "Usuario/getID/id="
   },
   renderRow: (user) => `
@@ -24,6 +25,7 @@ export const usuarioConfig={
       <td>
         <button class="btn-edit" onclick="editUsuario(${user.id})">Editar</button>
         <button class="btn-delete" onclick="deleteUsuario(${user.id})">Eliminar</button>
+        <button class="btn-edit" onclick="cambioPWD(${user.id})">Cambio PWD</button>
       </td>
     </tr>
   `

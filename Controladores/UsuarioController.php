@@ -15,6 +15,14 @@ class UsuarioController{
         return $ret;
     }
 
+    public function cambioPwd($dataUsuario){
+         $usr=new Usuario();
+ 
+        $ret=$usr->CambioPassd(['passwd'=>$dataUsuario['password'],'usuario'=>$dataUsuario['usuario']]);
+        if($ret->success){
+            return $ret;
+        }
+    }
     public function Login($dataLogin){
         $usr=new Usuario();
  

@@ -124,15 +124,8 @@ function iniciar() {
     const secretKey = 'pp234';
     const passwordEnc = CryptoJS.AES.encrypt(passwd, secretKey).toString();
     return passwordEnc;
-    // const datos = {
-    //     nombre: Nombre,
-    //     apellido: Apellido,
-    //     correo: Usuario,
-    //     fechanac: FechaNacimiento,
-    //     comentario: Comentario,
-    //     passwd:passwordEnc
-    // };
   }
+
   async function create(dataObj) {
     let rta = await PostData(endpoints.crear, dataObj);
     if (!rta.success) {
@@ -162,7 +155,7 @@ function iniciar() {
       MostrarSeccion('form');
       fields.forEach((f, i) => {
         //Si hay fechas hay que convertirlas a formato ISO
-        if(f=="fecha_nacimiento"){
+        if(f=="fechanac"){
           const [dia, mes, año] = datos[i].split("/"); 
           const fechaISO = `${año}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
           document.getElementById(f).value = fechaISO;
@@ -190,6 +183,14 @@ function iniciar() {
   Funcion REMOVE -------------------------------
   -------------------------------------------*/
   async function remove(id) { 
+    
+    Swal.fire({
+        title: '¡Hola!',
+        text: 'Esta es una ventana bonita',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+    });
+
     if (confirm(`¿Estás seguro de eliminar este ${entity} ?`)) {
       let rta = await PostData(endpoints.eliminar,  id );
       if (!rta.success) {
@@ -201,6 +202,7 @@ function iniciar() {
     }
   }
 
+  
 /* -------------------------------------------
   Funcion LISTAR -------------------------------
   -------------------------------------------*/

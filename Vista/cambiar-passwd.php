@@ -1,24 +1,24 @@
 <?php include "header.php" ; ?>
 
-    <a href="../Vista/Logout.php"></a>
+    <!-- <a href="../Vista/Logout.php"></a> -->
     <main>
         <div class="container">
             <div class="form-container">
                 <h2>Ingreso</h2>
-                <form id="userForm">
+                <form id="formCambioPasswd">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="firstName">Correo</label>
-                            <input type="text" id="correo" name="correo" placeholder="Nombre de usuario/correo" required>
+                            <label for="firstName">Contraseña</label>
+                            <input type="password" id="passwd" name="passwd" placeholder="Ingrese su contraseña" required>
                         </div>
                         <div class="form-group">
-                            <label for="lastName">Contraseña</label>
-                            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                            <label for="lastName">Confirme Contraseña</label>
+                            <input type="password" id="re-passwd" name="re-password" placeholder="Repita la contraseña" required>
                         </div>
                     </div>
                     
                                    
-                    <button id='btn-login' class="btn btn-submit">Enviar</button>
+                    <button id='btn-cambio-passwd' class="btn btn-submit">Enviar</button>
                 </form>
             </div>
         </div>

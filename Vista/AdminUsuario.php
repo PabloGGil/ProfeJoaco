@@ -28,7 +28,7 @@
                             <input type="email" id="correo" name="correo" required>
                         </div>
                         <div class="form-group">
-                            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                            <label for="fechanac">Fecha de Nacimiento</label>
                              <input type="date" id="fechanac" name="fechanac" required >
                         </div>
                         <div class="form-group">
@@ -74,5 +74,7 @@
             </section>
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script  type="module" src="../js/main.js"></script> 
 <?php include "footer.php" ?>    
