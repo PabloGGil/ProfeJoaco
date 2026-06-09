@@ -4,7 +4,7 @@
         <div class="container">
             <div class="form-container">
                 <h2>Pagina principal</h2>
- <div class="carousel-container">
+            <div class="carousel-container">
             <div class="carousel">
                 <div class="carousel-item">
                     <img src="Imagenes/5.jpg" alt="Paisaje montañoso">

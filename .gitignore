@@ -1,2 +1,3 @@
-**/tmp
-**/Logs
+/tmp
+/Logs
+/Logs/*.log
